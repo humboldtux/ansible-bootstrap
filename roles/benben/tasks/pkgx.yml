@@ -1,0 +1,16 @@
+---
+- name: Vérifier si pkgx est déjà installé
+  become: true
+  become_user: benben
+  shell: pkgx --version
+  register: pkgx_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Installer pkgx pour benben si absent
+  become: true
+  become_user: benben
+  shell: curl https://pkgx.sh | sh
+  args:
+    executable: /bin/bash
+  when: pkgx_check.stdout == ""
