@@ -1,4 +1,7 @@
 ---
+- name: Inclusion du rôle apt-nonfree
+  import_tasks: apt-nonfree.yml
+
 - name: Mettre à jour les paquets
   apt:
     update_cache: yes
