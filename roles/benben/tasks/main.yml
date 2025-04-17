@@ -2,3 +2,4 @@
 - import_tasks: user.yml
 - import_tasks: sudo.yml
 - import_tasks: pkgx.yml
+- import_tasks: dotfiles.yml

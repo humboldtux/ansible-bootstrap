@@ -122,6 +122,7 @@
       - resvg
       - starship
       - xq
+      - yadm
       - yt-dlp
       - zoxide
     state: present

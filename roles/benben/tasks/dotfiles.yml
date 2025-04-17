@@ -1,0 +1,17 @@
+---
+- name: Vérifier si le dépôt yadm dotfiles existe déjà
+  become: true
+  become_user: benben
+  stat:
+    path: ~/.local/share/yadm/repo.git
+  register: yadm_repo
+
+- name: Cloner les dotfiles avec yadm si absent
+  become: true
+  become_user: benben
+  shell: |
+    yadm clone "https://github.com/humboldtux/dotfiles.git" --no-bootstrap
+    yadm checkout $HOME
+  args:
+    executable: /bin/bash
+  when: not yadm_repo.stat.exists
