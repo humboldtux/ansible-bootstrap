@@ -1,0 +1,14 @@
+---
+- name: Vérifier si le dépôt wakemeops est déjà présent
+  stat:
+    path: /etc/apt/sources.list.d/wakemeops.list
+  register: wakemeops_repo
+
+- name: Installer le dépôt wakemeops et définir la priorité si absent
+  become: true
+  shell: |
+    curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
+    curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/set_repository_priority | sudo bash -s 100
+  when: not wakemeops_repo.stat.exists
+  args:
+    executable: /bin/bash
