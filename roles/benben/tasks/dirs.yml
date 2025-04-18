@@ -1,0 +1,12 @@
+---
+- name: Créer les dossiers bin, .local/bin et dev/src/github.com/humboldtux dans le home de benben
+  become: true
+  become_user: benben
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "~/bin"
+    - "~/.local/bin"
+    - "~/dev/src/github.com/humboldtux"
