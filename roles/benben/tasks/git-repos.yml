@@ -1,0 +1,23 @@
+---
+- name: Cloner les dépôts scripts, cheats, scripts-priv, cheats-priv s'ils n'existent pas
+  become: true
+  become_user: benben
+  git:
+    repo: "{{ item.repo }}"
+    dest: "/home/{{ become_user | default('benben') }}/dev/src/github.com/humboldtux/{{ item.name }}"
+    clone: yes
+    update: no
+  loop:
+    - { repo: 'git@github.com:humboldtux/scripts.git', name: 'scripts' }
+    - { repo: 'git@github.com:humboldtux/cheats.git', name: 'cheats' }
+    - { repo: 'git@github.com:humboldtux/scripts-priv.git', name: 'scripts-priv' }
+    - { repo: 'git@github.com:humboldtux/cheats-priv.git', name: 'cheats-priv' }
+  register: git_clone_results
+
+- name: Ajouter tous les dépôts clonés à gita
+  become: true
+  become_user: benben
+  shell: gita add ~/dev/src/github.com/humboldtux/*
+  args:
+    executable: /bin/bash
+  when: git_clone_results is changed
