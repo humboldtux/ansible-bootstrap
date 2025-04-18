@@ -3,3 +3,4 @@
 - import_tasks: wakemeops.yml
 - import_tasks: upgrade.yml
 - import_tasks: packages.yml
+- import_tasks: stew.yml

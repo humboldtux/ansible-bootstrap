@@ -1,0 +1,17 @@
+---
+- name: Vérifier si stew est déjà installé
+  stat:
+    path: /usr/local/bin/stew
+  register: stew_bin
+
+- name: Installer stew si absent
+  become: true
+  shell: |
+    version="0.5.0"
+    url="https://github.com/marwanhawari/stew/releases/download/v${version}/stew-v${version}-linux-amd64.tar.gz"
+    dir="/usr/local/bin"
+    curl -sL "$url" | tar -xz -C "$dir" 'stew'
+  args:
+    creates: /usr/local/bin/stew
+    executable: /bin/bash
+  when: not stew_bin.stat.exists
