@@ -3,57 +3,12 @@
   become: true
   apt:
     name:
-      - atool
       - anacron
       - apticron
-      - backupninja
-      - bat
-      - build-essential
-      - clang
-      - clang-tools
-      - curl
-      - detox
-      - diffoscope-minimal
-      - direnv
-      - dkms
-      - duf
-      - dos2unix
-      - fd-find
-      - ffmpeg
-      - ffmpegthumbnailer
-      - firmware-linux
-      - firmware-linux-free
-      - firmware-linux-nonfree
-      - ftp
-      - fuse3
-      - fzf
-      - gdebi
-      - golang
-      - git
-      - gita
-      - htop
-      - iftop
-      - iotop
-      - iotop-c
-      - jc
-      - jq
-      - kmon
-      - khal
-      - ldap-utils
-      - libproxychains4
-      - libssl-dev
-      - libx11-dev
-      - linux-headers-amd64
-      - lldb
-      - lnav
-      - locate
-      - lsd
-      - luarocks
-      - backupninja
-      - bat
       - atool
-      - anacron
-      - apticron
+      - backupninja
+      - bat
+      - bottom
       - broot
       - build-essential
       - clang
@@ -66,6 +21,8 @@
       - dkms
       - dos2unix
       - duf
+      - dust
+      - eza
       - fd-find
       - ffmpeg
       - ffmpegthumbnailer
@@ -107,6 +64,7 @@
       - newsboat
       - ntpdate
       - nvme-cli
+      - nushell
       - odt2txt
       - pdftk
       - pipx
@@ -124,6 +82,7 @@
       - xq
       - yadm
       - yt-dlp
+      - zellij
       - zoxide
     state: present
     update_cache: yes
