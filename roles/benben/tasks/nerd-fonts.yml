@@ -1,0 +1,25 @@
+---
+- name: Vérifier si le dossier ~/.local/share/fonts/NerdFonts existe
+  become: true
+  become_user: benben
+  stat:
+    path: ~/.local/share/fonts/NerdFonts
+  register: nerd_fonts_dir
+
+- name: Installer la police FiraCode Nerd Fonts si ~/.local/share/fonts est vide
+  become: true
+  become_user: benben
+  shell: |
+    font='FiraCode'
+    tmpdir="/tmp/nerd-fonts"
+    mkdir -p "$tmpdir/patched-fonts/${font}"
+    curl -sSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${font}.zip" -o "$tmpdir/font.zip"
+    unzip -q -o "$tmpdir/font.zip" -d "$tmpdir/patched-fonts/${font}"
+    cd "$tmpdir"
+    wget -q https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/install.sh
+    bash install.sh "${font}"
+    rm -rf "$tmpdir"
+    fc-cache
+  args:
+    executable: /bin/bash
+  when: not nerd_fonts_dir.stat.exists
