@@ -1,0 +1,16 @@
+---
+- name: Vérifier si le binaire zellij est déjà présent
+  stat:
+    path: /usr/local/bin/zellij
+  register: zellij_bin
+
+- name: Installer zellij si absent
+  become: true
+  shell: |
+    url="https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz"
+    dir="/usr/local/bin"
+    curl --location "$url" | tar -C "$dir" -xz
+  args:
+    creates: /usr/local/bin/zellij
+    executable: /bin/bash
+  when: not zellij_bin.stat.exists
