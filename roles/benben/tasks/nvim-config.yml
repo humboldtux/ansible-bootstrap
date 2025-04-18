@@ -1,0 +1,17 @@
+---
+- name: Vérifier si le dossier ~/.config/nvim existe
+  become: true
+  become_user: benben
+  stat:
+    path: ~/.config/nvim
+  register: nvim_confdir
+
+- name: Cloner la config Neovim si absente
+  become: true
+  become_user: benben
+  git:
+    repo: git@github.com:humboldtux/lazyvim.git
+    dest: ~/.config/nvim
+    clone: yes
+    update: no
+  when: not nvim_confdir.stat.exists
