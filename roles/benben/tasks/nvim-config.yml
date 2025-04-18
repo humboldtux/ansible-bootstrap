@@ -15,3 +15,12 @@
     clone: yes
     update: no
   when: not nvim_confdir.stat.exists
+  register: nvim_clone
+
+- name: Ajouter ~/.config/nvim à gita si cloné
+  become: true
+  become_user: benben
+  shell: gita add ~/.config/nvim
+  args:
+    executable: /bin/bash
+  when: nvim_clone is changed
