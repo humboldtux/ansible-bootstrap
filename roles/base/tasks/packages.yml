@@ -14,6 +14,7 @@
       - clang
       - clang-tools
       - curl
+      - clusterssh
       - delta
       - detox
       - diffoscope-minimal
@@ -35,6 +36,7 @@
       - gdebi
       - git
       - gita
+      - glow
       - golang
       - gum
       - htop
@@ -45,6 +47,8 @@
       - jq
       - khal
       - kmon
+      - lazydocker
+      - lazygit
       - ldap-utils
       - libproxychains4
       - libssl-dev
@@ -77,8 +81,11 @@
       - python3-pip
       - python3-venv
       - ranger
+      - restic
+      - resticprofile
       - resvg
       - starship
+      - vhs
       - xq
       - yadm
       - yt-dlp
