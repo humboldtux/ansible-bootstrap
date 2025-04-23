@@ -1,0 +1,35 @@
+---
+- name: Installation des paquets pour la configuration email
+  become: true
+  apt:
+    name:
+      - msmtp
+      - msmtp-mta
+    state: present
+
+- name: Configuration du fichier msmtprc
+  become: true
+  template:
+    src: msmtprc.j2
+    dest: /etc/msmtprc
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configuration du fichier aliases
+  become: true
+  copy:
+    content: "default: benoit.benedetti@unice.fr"
+    dest: /etc/aliases
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configuration du fichier mailname
+  become: true
+  copy:
+    content: ""
+    dest: /etc/mailname
+    owner: root
+    group: root
+    mode: '0644'

@@ -1,0 +1,15 @@
+#hostname={{ ansible_hostname }}
+#rewriteDomain=unice.fr
+#FromLineOverride=YES
+
+account unice
+#logfile /var/log/msmtp.log
+domain unice.fr
+host smtp.unice.fr
+port 25
+auth off
+tls off
+from sidi@unice.fr
+aliases /etc/aliases
+
+account default: unice
