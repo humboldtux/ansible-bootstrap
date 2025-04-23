@@ -14,3 +14,12 @@
     - benben
   tags:
     - benben
+
+- name: rôle iut-base
+  hosts: all
+  become: true
+  roles:
+    - base
+    - iut-base
+  tags:
+    - iut-base
