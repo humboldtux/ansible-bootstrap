@@ -15,15 +15,23 @@ runcmd:
 EOF
 )"
 ```
-### Lancer une VM de test locale pour écrire lesrôles Ansible
 
-A exécuter en local sur le serveur incus de s760p02
+### Lancer une VM de test locale pour écrire les rôles Ansible
+
+Au préalable, si travail en remote différent de s760p02:
+
+```bash
+sshfs -o idmap=user s760p02:/home/benben/dev/src/github.com/humboldtux/ansible-bootstrap /home/benben/dev/src/github.com/humboldtux/ansible-bootstrap
+```
+
+Puis, création VM:
 
 ```bash
 incus create images:debian/13/cloud debian13-test --vm --profile default --config=cloud-init.user-data="$(cat <<EOF
 #cloud-config
 packages:
   - ansible
+  - curl
 
 runcmd:
   - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local site.yml
@@ -38,11 +46,11 @@ incus start debian13-test
 
 ```bash
 watch -n 1 -d "incus info debian13-test  | grep 'Operating System' -A5"
-incus exec  debian13-test -- cloud-init status --long --wait
+incus exec debian13-test -- cloud-init status --long --wait
 ```
 
 ### Se connecter
 
 ```bash
-incus exec  debian13-test -- bash
+incus exec debian13-test -- bash
 ```
