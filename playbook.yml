@@ -1,0 +1,16 @@
+---
+- name: Configuration bootstrap
+  hosts: all
+  become: true
+  roles:
+    - base
+  tags:
+    - base
+
+- name: Création de l'utilisateur benben
+  hosts: all
+  become: true
+  roles:
+    - benben
+  tags:
+    - benben

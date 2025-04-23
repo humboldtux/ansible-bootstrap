@@ -1,6 +1,0 @@
----
-- name: Configuration bootstrap
-  hosts: all
-  become: yes
-  roles:
-    - base

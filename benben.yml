@@ -1,6 +1,0 @@
----
-- name: Création de l'utilisateur benben
-  hosts: all
-  become: yes
-  roles:
-    - benben
