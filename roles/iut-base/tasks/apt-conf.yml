@@ -1,0 +1,36 @@
+---
+- name: Installation du paquet unattended-upgrades
+  become: true
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Configuration des fichiers apt.conf.d
+  become: true
+  copy:
+    src: "apt-conf/files/{{ item }}"
+    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - 10dpkg-options
+    - 10recommends
+    - 15update-stamp
+    - 50unattended-upgrades
+
+- name: Vérifier si le répertoire apticron existe
+  become: true
+  stat:
+    path: /usr/lib/apticron/
+  register: apticron_dir
+
+- name: Configuration du fichier apticron.conf
+  become: true
+  copy:
+    src: apt-conf/files/apticron.conf
+    dest: /usr/lib/apticron/apticron.conf
+    owner: root
+    group: root
+    mode: '0755'
+  when: apticron_dir.stat.exists
