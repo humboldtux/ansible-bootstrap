@@ -6,4 +6,4 @@ apt update
 apt install -y ansible git
 
 # Récupérer le playbook depuis le dépôt GitHub
-ansible-pull -U https://github.com/humboldtux/ansible-bootstrap.git -C main -i localhost, -d /opt/ansible site.yml
+ansible-pull -U https://github.com/humboldtux/ansible-bootstrap.git -C main -i localhost, -d /opt/ansible playbook.yml

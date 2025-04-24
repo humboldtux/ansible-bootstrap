@@ -34,7 +34,7 @@ packages:
   - curl
 
 runcmd:
-  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local site.yml
+  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local playbook.yml --extra-vars "sudo_user=benben"
 EOF
 )"
 
