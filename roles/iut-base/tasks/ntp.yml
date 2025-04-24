@@ -1,0 +1,33 @@
+---
+- name: Vérifier si chronyd est installé
+  ansible.builtin.stat:
+    path: /usr/sbin/chronyd
+  register: chronyd_check
+
+- name: Configuration de timesyncd si chronyd n'est pas installé
+  become: true
+  copy:
+    src: ntp/files/timesyncd.conf
+    dest: /etc/systemd/timesyncd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  register: timesyncd_conf
+  when: not chronyd_check.stat.exists
+
+- name: Redémarrer le service timesyncd si la configuration a été modifiée
+  become: true
+  command: systemctl restart systemd-timesyncd
+  when: not chronyd_check.stat.exists and timesyncd_conf is changed
+
+- name: Activer et démarrer le service timesyncd
+  become: true
+  service:
+    name: systemd-timesyncd
+    state: started
+    enabled: true
+  register: timesyncd_service
+  retries: 3
+  delay: 5
+  until: timesyncd_service is success
+  when: not chronyd_check.stat.exists
