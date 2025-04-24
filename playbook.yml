@@ -22,3 +22,11 @@
     - iut-base
   tags:
     - iut-base
+
+- name: Rôle iut-pedago
+  hosts: all
+  become: true
+  roles:
+    - iut-pedago
+  tags:
+    - iut-pedago

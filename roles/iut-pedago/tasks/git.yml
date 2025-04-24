@@ -1,0 +1,9 @@
+---
+- name: Installer le script de configuration Git
+  become: true
+  copy:
+    src: git/files/gitconfig.sh
+    dest: /usr/local/bin/gitconfig.sh
+    owner: root
+    group: root
+    mode: "0755"
