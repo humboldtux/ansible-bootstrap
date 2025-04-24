@@ -7,19 +7,18 @@
   tags:
     - base
 
-- name: Création de l'utilisateur benben
+- name: Création de l'utilisateur sudo
   hosts: all
   become: true
   roles:
-    - benben
+    - sudo-user
   tags:
-    - benben
+    - sudo-user
 
-- name: rôle iut-base
+- name: Rôle iut-base
   hosts: all
   become: true
   roles:
-    - base
     - iut-base
   tags:
     - iut-base

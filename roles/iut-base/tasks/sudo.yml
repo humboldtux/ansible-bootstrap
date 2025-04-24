@@ -1,20 +1,9 @@
----
-- name: Créer le fichier sudo pour chef-base
-  become: true
-  template:
-    src: sudo/files/chef-base.j2
-    dest: /etc/sudoers.d/chef-base
-    owner: root
-    group: root
-    mode: '0440'
-    validate: 'visudo -cf %s'
-
-- name: Créer le fichier sudo pour chef-windows
+- name: Créer le fichier sudo pour windows
   become: true
   copy:
-    src: sudo/files/chef-windows
-    dest: /etc/sudoers.d/chef-windows
+    src: sudo/files/windows
+    dest: /etc/sudoers.d/windows
     owner: root
     group: root
-    mode: '0440'
-    validate: 'visudo -cf %s'
+    mode: "0440"
+    validate: "visudo -cf %s"

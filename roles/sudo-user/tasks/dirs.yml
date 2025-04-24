@@ -1,7 +1,7 @@
 ---
-- name: Créer les dossiers bin, .local/bin et dev/src/github.com/humboldtux dans le home de benben
+- name: "Créer les dossiers bin, .local/bin et dev/src/github.com/humboldtux dans le home de {{ sudo_user }}"
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   file:
     path: "{{ item }}"
     state: directory

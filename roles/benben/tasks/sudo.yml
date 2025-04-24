@@ -1,9 +1,0 @@
----
-- name: S'assurer que benben peut utiliser sudo sans mot de passe
-  become: true
-  ansible.builtin.copy:
-    dest: /etc/sudoers.d/benben
-    content: "benben ALL=(ALL) NOPASSWD:ALL\n"
-    owner: root
-    group: root
-    mode: '0440'

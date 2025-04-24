@@ -1,0 +1,10 @@
+---
+- name: "Configurer les droits sudo pour {{ sudo_user }}"
+  become: true
+  template:
+    src: sudo/files/base.j2
+    dest: "/etc/sudoers.d/{{ sudo_user }}"
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"

@@ -1,6 +1,4 @@
 # Fichier généré par Ansible - Ne pas modifier manuellement
 # Permet au groupe g-iut-admint2@campus.unice.fr d'utiliser sudo avec mot de passe
 
-Cmnd_Alias CHEF_WINDOWS_COMMANDS = ALL
-
 %g-iut-admint2@campus.unice.fr ALL=(ALL) ALL

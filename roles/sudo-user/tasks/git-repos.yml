@@ -1,10 +1,10 @@
 ---
 - name: Cloner les dépôts scripts, cheats, scripts-priv, cheats-priv s'ils n'existent pas
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   git:
     repo: "{{ item.repo }}"
-    dest: "/home/{{ become_user | default('benben') }}/dev/src/github.com/humboldtux/{{ item.name }}"
+    dest: "/home/{{ sudo_user }}/dev/src/github.com/humboldtux/{{ item.name }}"
     clone: yes
     update: no
   loop:
@@ -16,7 +16,7 @@
 
 - name: Ajouter tous les dépôts clonés à gita
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   shell: gita add ~/dev/src/github.com/humboldtux/*
   args:
     executable: /bin/bash

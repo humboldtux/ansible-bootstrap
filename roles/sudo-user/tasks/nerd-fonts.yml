@@ -1,14 +1,14 @@
 ---
 - name: Vérifier si le dossier ~/.local/share/fonts/NerdFonts existe
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   stat:
     path: ~/.local/share/fonts/NerdFonts
   register: nerd_fonts_dir
 
 - name: Installer la police FiraCode Nerd Fonts si ~/.local/share/fonts est vide
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   shell: |
     font='FiraCode'
     tmpdir="/tmp/nerd-fonts"

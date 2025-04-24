@@ -1,14 +1,14 @@
 ---
 - name: Vérifier si le dossier ~/.config/nvim existe
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   stat:
     path: ~/.config/nvim
   register: nvim_confdir
 
 - name: Cloner la config Neovim si absente
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   git:
     repo: git@github.com:humboldtux/lazyvim.git
     dest: ~/.config/nvim
@@ -19,7 +19,7 @@
 
 - name: Ajouter ~/.config/nvim à gita si cloné
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   shell: gita add ~/.config/nvim
   args:
     executable: /bin/bash

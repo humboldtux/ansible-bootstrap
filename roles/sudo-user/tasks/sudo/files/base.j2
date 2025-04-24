@@ -1,9 +1,6 @@
 # Fichier généré par Ansible - Ne pas modifier manuellement
 # Permet à l'utilisateur {{ sudo_user }} et aux groupes admin et sudo d'utiliser sudo sans mot de passe
 
-User_Alias CHEF_BASE_USERS = {{ sudo_user }}
-Cmnd_Alias CHEF_BASE_COMMANDS = ALL
-
-CHEF_BASE_USERS ALL=(ALL) NOPASSWD: CHEF_BASE_COMMANDS
+{{ sudo_user }} ALL=(ALL) NOPASSWD: ALL
 %admin ALL=(ALL) NOPASSWD: ALL
 %sudo ALL=(ALL) NOPASSWD: ALL

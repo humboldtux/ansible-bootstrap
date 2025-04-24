@@ -1,14 +1,14 @@
 ---
 - name: Vérifier si le dépôt yadm dotfiles existe déjà
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   stat:
     path: ~/.local/share/yadm/repo.git
   register: yadm_repo
 
 - name: Cloner les dotfiles avec yadm si absent
   become: true
-  become_user: benben
+  become_user: "{{ sudo_user }}"
   shell: |
     yadm clone "https://github.com/humboldtux/dotfiles.git" --no-bootstrap
     yadm checkout $HOME
