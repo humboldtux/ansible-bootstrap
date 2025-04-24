@@ -1,0 +1,22 @@
+[sssd]
+default_domain_suffix = campus.unice.fr
+services =
+
+[domain/campus.unice.fr]
+#pour éviter que nss cherche le compte root ou tout compte local sur l'AD
+filter_users = root,Debian-gdm,debian-gdm
+filter_groups = root
+#fallback_homedir = /home/%u
+override_homedir = /home/%u
+override_shell = /bin/bash
+ad_server = {{ sssd_servers }}
+enumerate = false
+ldap_user_search_base = OU=People,DC=campus,DC=unice,DC=fr???OU=IUT,DC=campus,DC=unice,DC=fr??
+ignore_group_members = True
+#auth_provider = ad
+ldap_referrals = False
+ad_gpo_access_control = disabled
+
+[nss]
+filter_users = root,Debian-gdm,debian-gdm
+filter_groups = root

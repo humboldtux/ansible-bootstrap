@@ -1,0 +1,8 @@
+Name: mkhomedir
+Default: yes
+Priority: 200
+
+Session-Type: Additional
+Session-Interactive-Only: yes
+Session:
+        required                pam_mkhomedir.so

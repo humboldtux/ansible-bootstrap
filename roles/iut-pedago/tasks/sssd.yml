@@ -1,0 +1,59 @@
+---
+- name: Installation des paquets SSSD et dépendances
+  become: true
+  apt:
+    name:
+      - libpam-sss
+      - libnss-sss
+      - libsss-sudo
+      - sssd
+      - sssd-tools
+      - realmd
+      - samba-common-bin
+      - adcli
+      - krb5-user
+      - packagekit
+    state: present
+
+- name: Création du répertoire de configuration SSSD
+  become: true
+  file:
+    path: /etc/sssd/conf.d
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Détermination des serveurs SSSD en fonction de l'adresse IP
+  set_fact:
+    sssd_servers: "UCAIUTDC02I.campus.unice.fr, UCAIUTDC03I.campus.unice.fr"
+  register: sssd_servers_default
+
+- name: Vérification si l'adresse IP est dans le réseau 134.59.143.0/24
+  set_fact:
+    sssd_servers: "UCAIUTDC01I.campus.unice.fr"
+  when: ansible_default_ipv4.address is regex("^134\\.59\\.143\\.")
+
+- name: Configuration de SSSD
+  become: true
+  template:
+    src: sssd/files/info.conf.j2
+    dest: /etc/sssd/conf.d/info.conf
+    mode: '0600'
+    owner: root
+    group: root
+
+- name: Installation de la configuration PAM pour mkhomedir
+  become: true
+  copy:
+    src: sssd/files/mkhomedir.pam
+    dest: /usr/share/pam-configs/mkhomedir
+    mode: '0755'
+    owner: root
+    group: root
+  register: mkhomedir_config
+
+- name: Mise à jour de la configuration PAM
+  become: true
+  command: pam-auth-update --package --enable mkhomedir
+  when: mkhomedir_config is changed
