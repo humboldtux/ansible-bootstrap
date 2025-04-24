@@ -1,0 +1,34 @@
+---
+- name: Installation des paquets auditd et audispd-plugins
+  become: true
+  apt:
+    name:
+      - auditd
+      - audispd-plugins
+    state: present
+
+- name: Téléchargement des règles auditd depuis GitHub
+  become: true
+  get_url:
+    url: https://raw.githubusercontent.com/Neo23x0/auditd/master/audit.rules
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: '0640'
+  register: audit_rules
+
+- name: Redémarrer le service auditd si les règles ont été modifiées
+  become: true
+  command: systemctl restart auditd
+  when: audit_rules is changed
+
+- name: Activer et démarrer le service auditd
+  become: true
+  service:
+    name: auditd
+    state: started
+    enabled: true
+  register: auditd_service
+  retries: 3
+  delay: 5
+  until: auditd_service is success

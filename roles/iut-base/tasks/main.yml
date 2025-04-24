@@ -5,4 +5,5 @@
 - import_tasks: openssh.yml
 - import_tasks: cron.yml
 - import_tasks: ntp.yml
+- import_tasks: auditd.yml
 - import_tasks: packages.yml
