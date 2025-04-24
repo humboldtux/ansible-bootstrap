@@ -1,0 +1,31 @@
+#Debian Default
+Include /etc/ssh/sshd_config.d/*.conf
+ChallengeResponseAuthentication no
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
+UsePAM yes
+
+#Ajouts
+LoginGraceTime 30
+PermitRootLogin no
+MaxAuthTries 6
+MaxSessions 10
+MaxStartups 10
+ChrootDirectory none
+PermitEmptyPasswords no
+PermitTunnel no
+PermitUserEnvironment no
+PubkeyAuthentication yes
+TrustedUserCAKeys /etc/ssh/ca_keys
+
+PasswordAuthentication no
+X11Forwarding no
+AllowTcpForwarding no
+AllowAgentForwarding no
+
+Match Group sudo
+  PasswordAuthentication no
+
+Match User {{ sudo_user }}
+  PasswordAuthentication no

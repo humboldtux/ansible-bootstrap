@@ -1,0 +1,15 @@
+---
+- name: Configuration du serveur SSH
+  become: true
+  template:
+    src: openssh/files/sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0750'
+  register: sshd_config_updated
+
+- name: Redémarrer le service SSH si la configuration a été modifiée
+  become: true
+  command: systemctl restart ssh
+  when: sshd_config_updated is changed
