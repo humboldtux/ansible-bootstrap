@@ -1,0 +1,57 @@
+---
+- name: Installation des paquets pédagogiques
+  become: true
+  apt:
+    name:
+      - bc
+      - doc-base
+      - doxygen
+      - doxygen-doc
+      - elvish
+      - emacs
+      - fish
+      - flex
+      - g++-multilib
+      - gcc-doc
+      - gcc-doc-base
+      - gcc-multilib
+      - gdb
+      - gdb-doc
+      - ghex
+      - indent
+      - keychain
+      - libblas-dev
+      - libncurses-dev
+      - libnotify-bin
+      - libreoffice
+      - libx11-dev
+      - libxt-dev
+      - manpages
+      - manpages-dev
+      - manpages-posix
+      - manpages-posix-dev
+      - maven
+      - default-jdk-headless
+      - default-jre-headless
+      - php-cli
+      - php-common
+      - postgresql-client
+      - postgresql-client-common
+      - python-pil-doc
+      - python3-matplotlib
+      - python3-numpy
+      - python3-pulp
+      - python3-scipy
+      - python3-sympy
+      - r-base
+      - r-base-core
+      - r-base-dev
+      - r-base-html
+      - rcs
+      - rlwrap
+      - r-recommended
+      - subversion
+      - valgrind
+      - zsh
+    state: present
+    update_cache: yes

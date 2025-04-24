@@ -52,7 +52,6 @@
       - ldap-utils
       - libproxychains4
       - libssl-dev
-      - libx11-dev
       - linux-headers-amd64
       - lldb
       - lnav
@@ -84,6 +83,7 @@
       - restic
       - resticprofile
       - resvg
+      - smbclient
       - starship
       - vhs
       - xq
