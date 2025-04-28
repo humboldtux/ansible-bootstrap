@@ -7,6 +7,14 @@
   tags:
     - base
 
+- name: Rôle iut-desktop
+  hosts: all
+  become: true
+  roles:
+    - desktop
+  tags:
+    - desktop
+
 - name: Création de l'utilisateur sudo
   hosts: all
   become: true
