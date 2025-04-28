@@ -1,0 +1,40 @@
+---
+- name: Vérifier si la clé GPG de VirtualBox existe déjà
+  ansible.builtin.stat:
+    path: /usr/share/keyrings/oracle-virtualbox-2016.gpg
+  register: virtualbox_key
+
+- name: Télécharger et installer la clé GPG de VirtualBox
+  become: true
+  shell: |
+    wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | gpg --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg --dearmor
+  args:
+    creates: /usr/share/keyrings/oracle-virtualbox-2016.gpg
+  when: not virtualbox_key.stat.exists
+  register: virtualbox_key_added
+
+- name: Vérifier si le dépôt VirtualBox existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/virtualbox.list
+  register: virtualbox_repo
+
+- name: Ajouter le dépôt VirtualBox
+  become: true
+  copy:
+    content: "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian trixie contrib"
+    dest: /etc/apt/sources.list.d/virtualbox.list
+    mode: '0644'
+  when: not virtualbox_repo.stat.exists
+  register: virtualbox_repo_added
+
+- name: Mettre à jour les dépôts APT
+  become: true
+  apt:
+    update_cache: yes
+  when: virtualbox_key_added is changed or virtualbox_repo_added is changed
+
+- name: Installer VirtualBox
+  become: true
+  apt:
+    name: virtualbox-7.1
+    state: present
