@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/veyon-service
+Hidden=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=veyon-service
+Name=veyon-service
+Comment=veyon-service

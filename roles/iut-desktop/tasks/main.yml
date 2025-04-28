@@ -5,3 +5,4 @@
 - import_tasks: cron.yml
 - import_tasks: android.yml
 - import_tasks: microsoft.yml
+- import_tasks: veyon.yml
