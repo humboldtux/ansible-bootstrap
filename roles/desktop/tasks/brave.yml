@@ -1,0 +1,39 @@
+---
+- name: Vérifier si la clé GPG de Brave existe déjà
+  ansible.builtin.stat:
+    path: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+  register: brave_key
+
+- name: Télécharger la clé GPG de Brave
+  become: true
+  get_url:
+    url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    mode: '0644'
+  when: not brave_key.stat.exists
+
+- name: Vérifier si le dépôt Brave existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/brave-browser-release.list
+  register: brave_repo
+
+- name: Ajouter le dépôt Brave
+  become: true
+  copy:
+    content: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+    dest: /etc/apt/sources.list.d/brave-browser-release.list
+    mode: '0644'
+  when: not brave_repo.stat.exists
+  register: brave_repo_added
+
+- name: Mettre à jour les dépôts APT
+  become: true
+  apt:
+    update_cache: yes
+  when: brave_repo_added is changed
+
+- name: Installer Brave Browser
+  become: true
+  apt:
+    name: brave-browser
+    state: present

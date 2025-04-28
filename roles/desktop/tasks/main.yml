@@ -1,3 +1,5 @@
 ---
 # Tâches pour le rôle desktop
 # Ce fichier importera les différentes tâches à mesure qu'elles seront ajoutées
+
+- import_tasks: brave.yml
