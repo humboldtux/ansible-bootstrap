@@ -5,3 +5,4 @@
 - import_tasks: brave.yml
 - import_tasks: firefox.yml
 - import_tasks: ghostty.yml
+- import_tasks: wezterm.yml
