@@ -1,0 +1,2 @@
+# Sudoers file for ansible-postes
+%info_ens_admin_postes@campus.unice.fr ALL=(ALL) ALL

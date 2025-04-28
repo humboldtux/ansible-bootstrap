@@ -1,0 +1,29 @@
+---
+- name: Récupérer le nom d'hôte
+  ansible.builtin.command: hostname
+  register: hostname_result
+  changed_when: false
+
+- name: Installer la configuration SSH pour les postes de travail
+  become: true
+  copy:
+    src: ssh/files/50-desktop.conf
+    dest: /etc/ssh/sshd_config.d/50-desktop.conf
+    mode: '0750'
+    owner: root
+    group: root
+    validate: cat %s
+    backup: yes
+  when: hostname_result.stdout != 'LINSERV-INFO-01'
+
+- name: Créer le fichier sudoers pour ansible-postes
+  become: true
+  copy:
+    src: ssh/files/ansible-postes
+    dest: /etc/sudoers.d/ansible-postes
+    mode: '0440'
+    owner: root
+    group: root
+    validate: 'visudo -cf %s'
+    backup: yes
+  when: hostname_result.stdout != 'LINSERV-INFO-01'
