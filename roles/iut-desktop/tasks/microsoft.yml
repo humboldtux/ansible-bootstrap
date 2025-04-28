@@ -1,0 +1,56 @@
+---
+- name: Vérifier si la clé GPG de Microsoft existe déjà
+  ansible.builtin.stat:
+    path: /usr/share/keyrings/microsoft.gpg
+  register: microsoft_key
+
+- name: Télécharger et installer la clé GPG de Microsoft
+  become: true
+  shell: |
+    curl -fSsL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg
+  args:
+    creates: /usr/share/keyrings/microsoft.gpg
+  when: not microsoft_key.stat.exists
+  register: microsoft_key_added
+
+- name: Vérifier si le dépôt Microsoft Edge existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/microsoft-edge.list
+  register: edge_repo
+
+- name: Ajouter le dépôt Microsoft Edge
+  become: true
+  copy:
+    content: "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main"
+    dest: /etc/apt/sources.list.d/microsoft-edge.list
+    mode: '0644'
+  when: not edge_repo.stat.exists
+  register: edge_repo_added
+
+- name: Vérifier si le dépôt Visual Studio Code existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/code.list
+  register: code_repo
+
+- name: Ajouter le dépôt Visual Studio Code
+  become: true
+  copy:
+    content: "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    dest: /etc/apt/sources.list.d/code.list
+    mode: '0644'
+  when: not code_repo.stat.exists
+  register: code_repo_added
+
+- name: Mettre à jour les dépôts APT
+  become: true
+  apt:
+    update_cache: yes
+  when: microsoft_key_added is changed or edge_repo_added is changed or code_repo_added is changed
+
+- name: Installer Visual Studio Code et Microsoft Edge
+  become: true
+  apt:
+    name:
+      - code
+      - microsoft-edge-stable
+    state: present
