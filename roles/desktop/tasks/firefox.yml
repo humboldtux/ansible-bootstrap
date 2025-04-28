@@ -1,0 +1,50 @@
+---
+- name: Vérifier si le dossier keyrings existe
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: Vérifier si la clé GPG de Mozilla existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/packages.mozilla.org.asc
+  register: mozilla_key
+
+- name: Télécharger la clé GPG de Mozilla
+  become: true
+  get_url:
+    url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+    dest: /etc/apt/keyrings/packages.mozilla.org.asc
+    mode: '0644'
+  when: not mozilla_key.stat.exists
+
+- name: Vérifier si le dépôt Mozilla existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/mozilla.list
+  register: mozilla_repo
+
+- name: Ajouter le dépôt Mozilla
+  become: true
+  copy:
+    content: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
+    dest: /etc/apt/sources.list.d/mozilla.list
+    mode: '0644'
+  when: not mozilla_repo.stat.exists
+  register: mozilla_repo_added
+
+- name: Mettre à jour les dépôts APT
+  become: true
+  apt:
+    update_cache: yes
+  when: mozilla_repo_added is changed
+
+- name: Installer Firefox et la localisation française
+  become: true
+  apt:
+    name:
+      - firefox
+      - firefox-l10n-fr
+    state: present
