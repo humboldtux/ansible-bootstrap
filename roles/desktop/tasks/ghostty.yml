@@ -1,0 +1,40 @@
+---
+- name: Vérifier si le dépôt Ghostty existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/ghostty.list
+  register: ghostty_repo
+
+- name: Ajouter le dépôt Ghostty
+  become: true
+  copy:
+    content: "deb http://download.opensuse.org/repositories/home:/clayrisser:/bookworm/Debian_12/ /"
+    dest: /etc/apt/sources.list.d/ghostty.list
+    mode: '0644'
+  when: not ghostty_repo.stat.exists
+  register: ghostty_repo_added
+
+- name: Vérifier si la clé GPG de Ghostty existe déjà
+  ansible.builtin.stat:
+    path: /etc/apt/trusted.gpg.d/ghostty.gpg
+  register: ghostty_key
+
+- name: Télécharger et installer la clé GPG de Ghostty
+  become: true
+  shell: |
+    curl -fsSL https://download.opensuse.org/repositories/home:clayrisser:bookworm/Debian_12/Release.key | gpg --dearmor > /etc/apt/trusted.gpg.d/ghostty.gpg
+  args:
+    creates: /etc/apt/trusted.gpg.d/ghostty.gpg
+  when: not ghostty_key.stat.exists
+  register: ghostty_key_added
+
+- name: Mettre à jour les dépôts APT
+  become: true
+  apt:
+    update_cache: yes
+  when: ghostty_repo_added is changed or ghostty_key_added is changed
+
+- name: Installer Ghostty
+  become: true
+  apt:
+    name: ghostty
+    state: present
