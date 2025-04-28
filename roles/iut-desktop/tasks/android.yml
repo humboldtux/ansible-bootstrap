@@ -1,0 +1,26 @@
+---
+- name: Récupérer le nom d'hôte
+  ansible.builtin.command: hostname
+  register: hostname_result
+  changed_when: false
+
+- name: Installation des paquets pour le développement Android
+  become: true
+  apt:
+    name:
+      - android-sdk-platform-tools-common
+      - bridge-utils
+      - lib32ncurses6
+      - lib32stdc++6
+      - lib32stdc++6-amd64-cross
+      - lib32stdc++6-x32-cross
+      - lib32z1
+      - lib32z1-dev
+      - libc6-i386
+      - libvirt-daemon-system
+      - libvirt-clients
+      - qemu-kvm
+      - zlib1g
+    state: present
+    update_cache: yes
+  when: hostname_result.stdout != 'LINSERV-INFO-01'
