@@ -2,3 +2,4 @@
 - import_tasks: gnome.yml
 - import_tasks: apt.yml
 - import_tasks: ssh.yml
+- import_tasks: cron.yml
