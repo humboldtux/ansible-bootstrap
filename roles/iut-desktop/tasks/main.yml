@@ -6,3 +6,4 @@
 - import_tasks: android.yml
 - import_tasks: microsoft.yml
 - import_tasks: veyon.yml
+- import_tasks: packages.yml
