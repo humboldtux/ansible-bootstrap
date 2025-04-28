@@ -1,0 +1,13 @@
+[org/gnome/desktop/interface]
+
+[org/gnome/desktop/background]
+
+[org/gnome/login-screen]
+logo='/usr/share/images/vendor-logos/logo-text-version-64.png'
+disable-user-list=true
+banner-message-enable=true
+banner-message-text='Utilisez vos identifiants UCA pour vous connecter'
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=1200
+sleep-inactive-ac-type='suspend'

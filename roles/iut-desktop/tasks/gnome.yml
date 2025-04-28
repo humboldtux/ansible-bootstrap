@@ -1,0 +1,22 @@
+---
+- name: Installer la configuration greeter.dconf-defaults
+  become: true
+  copy:
+    src: gnome/files/greeter.dconf-defaults
+    dest: /etc/gdm3/greeter.dconf-defaults
+    mode: '0644'
+    owner: root
+    group: root
+    validate: cat %s
+    backup: yes
+
+- name: Installer la configuration daemon.conf
+  become: true
+  copy:
+    src: gnome/files/daemon.conf
+    dest: /etc/gdm3/daemon.conf
+    mode: '0644'
+    owner: root
+    group: root
+    validate: cat %s
+    backup: yes

@@ -30,3 +30,11 @@
     - iut-pedago
   tags:
     - iut-pedago
+
+- name: Rôle iut-desktop
+  hosts: all
+  become: true
+  roles:
+    - iut-desktop
+  tags:
+    - iut-desktop
