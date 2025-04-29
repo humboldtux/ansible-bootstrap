@@ -65,7 +65,7 @@
       - needrestart
       - neovim
       - newsboat
-      - ntpdate
+      - ntpsec-ntpdate
       - nvme-cli
       - nushell
       - odt2txt
