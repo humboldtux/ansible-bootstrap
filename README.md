@@ -34,18 +34,19 @@ packages:
   - curl
 
 runcmd:
-  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local playbook.yml --extra-vars "sudo_user=benben"
+  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local playbook.yml --tags "base" --extra-vars "sudo_user=benben"
 EOF
-)"
-
-incus config device add debian13-test srcdir disk source=$(pwd) path=/mnt/ansible-bootstrap
+)" && \
+incus config device override debian13-test root size=30GB && \
+incus config set debian13-test limits.cpu=4 limits.memory=4GiB && \
+incus config device add debian13-test srcdir disk source=$(pwd) path=/mnt/ansible-bootstrap && \
 incus start debian13-test
 ```
 
 ### Attendre la fin du lancement puis de cloud-init
 
 ```bash
-watch -n 1 -d "incus info debian13-test  | grep 'Operating System' -A5"
+watch -n 1 -d "incus info debian13-test  | grep 'Operating System' -A5" && \
 incus exec debian13-test -- cloud-init status --long --wait
 ```
 
