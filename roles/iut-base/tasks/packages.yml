@@ -13,12 +13,12 @@
       - bsd-mailx
       - dctrl-tools
       - debian-goodies
-      - deborphan
       - debsums
       - dialog
       - dirmngr
       - dstat
       - dunst
+      - fastfetch
       - file
       - firmware-amd-graphics
       - firmware-misc-nonfree
@@ -36,13 +36,11 @@
       - mc
       - mercurial
       - ncat
-      - neofetch
       - openvpn
       - os-prober
       - parted
       - powermgmt-base
       - pydf
-      - rcconf
       - rdiff-backup
       - ripgrep
       - rsync

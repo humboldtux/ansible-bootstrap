@@ -73,7 +73,6 @@
       - texlive-lang-french
       - texstudio
       - ttf-bitstream-vera
-      - ttf-mscorefonts-installer
       - ttf-xfree86-nonfree
       - ure
       - wireshark
