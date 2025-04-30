@@ -6,11 +6,15 @@
     path: ~/.config/nvim
   register: nvim_confdir
 
+- name: Définir l'URL du dépôt Git en fonction de l'utilisateur
+  set_fact:
+    nvim_repo_url: "{{ 'https://github.com/humboldtux/lazyvim.git' if sudo_user in ['sirm', 'snap', 'admin'] else 'git@github.com:humboldtux/lazyvim.git' }}"
+
 - name: Cloner la config Neovim si absente
   become: true
   become_user: "{{ sudo_user }}"
   git:
-    repo: git@github.com:humboldtux/lazyvim.git
+    repo: "{{ nvim_repo_url }}"
     dest: ~/.config/nvim
     clone: yes
     update: no

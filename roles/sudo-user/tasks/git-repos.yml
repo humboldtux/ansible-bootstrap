@@ -1,5 +1,79 @@
 ---
-- name: Cloner les dépôts scripts, cheats, scripts-priv, cheats-priv s'ils n'existent pas
+- name: Définir les dépôts à cloner en fonction de l'utilisateur
+  set_fact:
+    repos_to_clone: |
+      {% if sudo_user in ['sirm', 'snap', 'admin'] %}
+      [{ 'repo': 'https://github.com/humboldtux/scripts.git', 'name': 'scripts' }, { 'repo': 'https://github.com/humboldtux/cheats.git', 'name': 'cheats' }]
+      {% else %}
+      [{ 'repo': 'git@github.com:humboldtux/scripts.git', 'name': 'scripts' }, { 'repo': 'git@github.com:humboldtux/cheats.git', 'name': 'cheats' }, { 'repo': 'git@github.com:humboldtux/scripts-priv.git', 'name': 'scripts-priv' }, { 'repo': 'git@github.com:humboldtux/cheats-priv.git', 'name': 'cheats-priv' }]
+      {% endif %}
+
+# Tâches pour les utilisateurs qui ne sont pas sirm, snap ou admin
+- name: Vérifier si le répertoire SSH existe
+  become: true
+  become_user: "{{ sudo_user }}"
+  stat:
+    path: "/home/{{ sudo_user }}/.ssh"
+  register: ssh_dir
+  when: sudo_user not in ['sirm', 'snap', 'admin']
+
+- name: Créer le répertoire SSH s'il n'existe pas
+  become: true
+  become_user: "{{ sudo_user }}"
+  file:
+    path: "/home/{{ sudo_user }}/.ssh"
+    state: directory
+    mode: "0700"
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not ssh_dir.stat.exists
+
+- name: Vérifier si la clé SSH pour GitHub existe
+  become: true
+  become_user: "{{ sudo_user }}"
+  stat:
+    path: "/home/{{ sudo_user }}/.ssh/id_rsa_github.com"
+  register: github_key
+  when: sudo_user not in ['sirm', 'snap', 'admin']
+
+- name: Créer le répertoire SSH s'il n'existe pas
+  become: true
+  become_user: "{{ sudo_user }}"
+  file:
+    path: "/home/{{ sudo_user }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ sudo_user }}"
+    group: "{{ sudo_user }}"
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Informer l'utilisateur qu'il doit créer manuellement le fichier de clé SSH
+  pause:
+    prompt: |
+      incus file push ~/.ssh/id_rsa_github.com debian13-test/home/{{ sudo_user }}/.ssh/id_rsa_github.com
+
+      Une fois terminé, appuyez sur ENTRÉE pour continuer...
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Appliquer les permissions correctes au fichier de clé SSH
+  become: true
+  file:
+    path: "/home/{{ sudo_user }}/.ssh/id_rsa_github.com"
+    mode: '0600'
+    owner: "{{ sudo_user }}"
+    group: "{{ sudo_user }}"
+  register: ssh_key_created
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Exécuter la commande SSH pour accepter la clé de l'hôte GitHub
+  become: true
+  become_user: "{{ sudo_user }}"
+  shell: ssh -o StrictHostKeyChecking=accept-new git@github.com
+  register: ssh_command_result
+  failed_when: false
+  changed_when: false
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and ssh_key_created is defined and ssh_key_created.changed
+
+# Clonage des dépôts Git
+- name: Cloner les dépôts Git sélectionnés s'ils n'existent pas
   become: true
   become_user: "{{ sudo_user }}"
   git:
@@ -7,11 +81,7 @@
     dest: "/home/{{ sudo_user }}/dev/src/github.com/humboldtux/{{ item.name }}"
     clone: yes
     update: no
-  loop:
-    - { repo: 'git@github.com:humboldtux/scripts.git', name: 'scripts' }
-    - { repo: 'git@github.com:humboldtux/cheats.git', name: 'cheats' }
-    - { repo: 'git@github.com:humboldtux/scripts-priv.git', name: 'scripts-priv' }
-    - { repo: 'git@github.com:humboldtux/cheats-priv.git', name: 'cheats-priv' }
+  loop: "{{ repos_to_clone }}"
   register: git_clone_results
 
 - name: Ajouter tous les dépôts clonés à gita
