@@ -1,0 +1,18 @@
+---
+- name: Vérifier si pipx est installé
+  become: true
+  apt:
+    name: pipx
+    state: present
+    update_cache: yes
+
+- name: Définir la liste des paquets pipx à installer
+  set_fact:
+    pipx_packages: "ast-grep-cli pywhat"
+
+- name: Installer les paquets pipx
+  become: true
+  become_user: "{{ sudo_user }}"
+  shell: "pipx install {{ pipx_packages }}"
+  register: pipx_install_result
+  changed_when: "'installed package' in pipx_install_result.stdout"

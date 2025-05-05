@@ -4,3 +4,4 @@
 - import_tasks: upgrade.yml
 - import_tasks: packages.yml
 - import_tasks: stew.yml
+- import_tasks: pipx-packages.yml
