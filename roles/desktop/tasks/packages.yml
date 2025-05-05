@@ -1,0 +1,10 @@
+---
+- name: Installation des paquets pour le desktop
+  become: true
+  apt:
+    name:
+      - opensnitch
+      - opensnitch-ebpf-modules
+      - python3-opensnitch-ui
+    state: present
+    update_cache: yes

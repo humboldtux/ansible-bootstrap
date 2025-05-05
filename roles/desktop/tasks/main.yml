@@ -6,3 +6,4 @@
 - import_tasks: firefox.yml
 - import_tasks: ghostty.yml
 - import_tasks: wezterm.yml
+- import_tasks: packages.yml
