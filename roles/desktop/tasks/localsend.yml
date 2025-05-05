@@ -1,0 +1,40 @@
+---
+- name: Définir la version de LocalSend
+  set_fact:
+    localsend_version: "1.17.0"
+
+- name: Vérifier si LocalSend est déjà installé
+  shell: dpkg-query -W -f='${Status} ${Version}\n' localsend 2>/dev/null || echo "not installed"
+  register: localsend_status
+  changed_when: false
+
+- name: Créer un répertoire temporaire pour le téléchargement
+  become: true
+  file:
+    path: /tmp/localsend_download
+    state: directory
+    mode: "0755"
+  when: "'not installed' in localsend_status.stdout or not localsend_status.stdout is search(localsend_version)"
+
+- name: Télécharger LocalSend
+  become: true
+  get_url:
+    url: "https://github.com/localsend/localsend/releases/download/v{{ localsend_version }}/LocalSend-{{ localsend_version }}-linux-x86-64.deb"
+    dest: "/tmp/localsend_download/LocalSend-{{ localsend_version }}-linux-x86-64.deb"
+    mode: "0644"
+  when: "'not installed' in localsend_status.stdout or not localsend_status.stdout is search(localsend_version)"
+  register: localsend_downloaded
+
+- name: Installer LocalSend
+  become: true
+  apt:
+    deb: "/tmp/localsend_download/LocalSend-{{ localsend_version }}-linux-x86-64.deb"
+    state: present
+  when: "'not installed' in localsend_status.stdout or not localsend_status.stdout is search(localsend_version)"
+
+- name: Nettoyer le répertoire temporaire
+  become: true
+  file:
+    path: /tmp/localsend_download
+    state: absent
+  when: localsend_downloaded is changed
