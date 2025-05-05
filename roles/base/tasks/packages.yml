@@ -15,7 +15,6 @@
       - clang-tools
       - curl
       - clusterssh
-      - delta
       - detox
       - diffoscope-minimal
       - direnv
@@ -35,6 +34,7 @@
       - fzf
       - gdebi
       - git
+      - git-delta
       - gita
       - glow
       - golang
@@ -60,7 +60,10 @@
       - luarocks
       - mariadb-client
       - miller
+      - manpages-posix
+      - manpages-posix-dev
       - moreutils
+      - nano
       - ncdu
       - needrestart
       - neovim
