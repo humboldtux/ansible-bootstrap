@@ -1,0 +1,52 @@
+---
+- name: Vérifier si BurpSuite est installé dans le répertoire utilisateur
+  become: true
+  become_user: "{{ sudo_user }}"
+  stat:
+    path: "/home/{{ sudo_user }}/BurpSuiteCommunity"
+  register: burp_home_dir
+
+- name: Créer le fichier de réponse pour l'installation silencieuse
+  become: true
+  become_user: "{{ sudo_user }}"
+  copy:
+    dest: /tmp/response.varfile
+    content: |
+      sys.adminRights$Boolean=false
+      sys.fileAssociation.extensions$StringArray="burp"
+      sys.fileAssociation.launchers$StringArray="70"
+      sys.installationDir=/home/{{ sudo_user }}/BurpSuiteCommunity
+      sys.languageId=en
+      sys.programGroupDisabled$Boolean=false
+      sys.symlinkDir=/home/{{ sudo_user }}/.local/binaries
+    mode: "0644"
+  when: not burp_home_dir.stat.exists
+
+- name: Télécharger BurpSuite Community
+  become: true
+  become_user: "{{ sudo_user }}"
+  get_url:
+    url: "https://portswigger.net/burp/releases/download?product=community&type=Linux"
+    dest: /tmp/burp.sh
+    mode: "0755"
+  when: not burp_home_dir.stat.exists
+  register: burp_download
+
+- name: Installer BurpSuite Community
+  become: true
+  become_user: "{{ sudo_user }}"
+  shell: sh /tmp/burp.sh -q -varfile /tmp/response.varfile
+  args:
+    executable: /bin/bash
+  when: burp_download is changed
+  register: burp_install
+
+- name: Nettoyer les fichiers temporaires
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/burp.sh
+    - /tmp/response.varfile
+  when: burp_download is changed

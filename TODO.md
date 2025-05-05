@@ -20,6 +20,9 @@ iut-pedago:
 iut-desktop:
   packages:
       - ttf-mscorefonts-installer
+      Erreur : Impossible de trouver le paquet freerdp2-x11
+      Erreur : Impossible de trouver le paquet libcanberra-gtk-module
+      Erreur : Impossible de trouver le paquet lightdm-remote-session-freerdp2
 
 TASK [iut-desktop : Désactiver et arrêter le service Veyon]
 
@@ -95,34 +98,6 @@ def "mysetup desktop multimedia" [] {
   cargo install songrec | ignore
 
 }
-
-def "mysetup desktop pkgs" [] {
-
-  let pkgs = [
-    calibre
-    copyq
-    flameshot
-    fonts-arphic-ukai
-    fonts-arphic-uming
-    fonts-ipafont-mincho
-    fonts-ipafont-gothic
-    fonts-unfonts-core
-    freerdp2-x11
-    icedtea-netx
-    keychain
-    libcanberra-gtk-module
-    libreoffice
-    lightdm-remote-session-freerdp2
-    network-manager-pptp-gnome
-    okular
-    cpu-x
-    rdesktop
-    ssh-askpass-gnome
-    ttf-xfree86-nonfree
-    wireshark
-    xclip
-    zathura
-  ]
 
   sudo DEBIAN_FRONTEND=noninteractive apt-get -qq -y install $pkgs | ignore
 
