@@ -1,16 +1,20 @@
 ---
+- name: Installer curl
+  become: true
+  apt:
+    name: curl
+    state: present
+    update_cache: yes
+
 - name: Vérifier si pkgx est déjà installé
   become: true
-  become_user: "{{ sudo_user }}"
-  shell: pkgx --version
-  register: pkgx_check
-  ignore_errors: true
-  changed_when: false
+  stat:
+    path: "/usr/local/bin/pkgx"
+  register: pkgx_bin
 
-- name: "Installer pkgx pour {{ sudo_user }} si absent"
+- name: "Installer pkgx si absent"
   become: true
-  become_user: "{{ sudo_user }}"
   shell: curl https://pkgx.sh | sh
   args:
     executable: /bin/bash
-  when: pkgx_check.stdout == ""
+  when: not pkgx_bin.stat.exists

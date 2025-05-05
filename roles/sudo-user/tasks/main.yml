@@ -2,10 +2,10 @@
 - import_tasks: user.yml
 - import_tasks: password.yml
 - import_tasks: sudo.yml
-- import_tasks: pkgx.yml
-- import_tasks: dotfiles.yml
 - import_tasks: dirs.yml
+- import_tasks: dotfiles.yml
 - import_tasks: git-repos.yml
+- import_tasks: pkgx.yml
 - import_tasks: nvim-config.yml
 - import_tasks: nerd-fonts.yml
 - import_tasks: unroot.yml

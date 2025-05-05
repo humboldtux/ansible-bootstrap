@@ -1,4 +1,83 @@
 ---
+# S'assurer que yadm est installé avant de commencer
+- name: Installer yadm
+  become: true
+  apt:
+    name: yadm
+    state: present
+    update_cache: yes
+
+- name: Installer Gita
+  become: true
+  apt:
+    name: gita
+    state: present
+    update_cache: yes
+
+# Tâches pour les utilisateurs qui ne sont pas sirm, snap ou admin
+- name: Vérifier si le répertoire SSH existe
+  become: true
+  become_user: "{{ sudo_user }}"
+  stat:
+    path: "/home/{{ sudo_user }}/.ssh"
+  register: ssh_dir
+  when: sudo_user not in ['sirm', 'snap', 'admin']
+
+- name: Créer le répertoire SSH s'il n'existe pas
+  become: true
+  become_user: "{{ sudo_user }}"
+  file:
+    path: "/home/{{ sudo_user }}/.ssh"
+    state: directory
+    mode: "0700"
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not ssh_dir.stat.exists
+
+- name: Vérifier si la clé SSH pour GitHub existe
+  become: true
+  become_user: "{{ sudo_user }}"
+  stat:
+    path: "/home/{{ sudo_user }}/.ssh/id_rsa_github.com"
+  register: github_key
+  when: sudo_user not in ['sirm', 'snap', 'admin']
+
+- name: Créer le répertoire SSH s'il n'existe pas
+  become: true
+  become_user: "{{ sudo_user }}"
+  file:
+    path: "/home/{{ sudo_user }}/.ssh"
+    state: directory
+    mode: "0700"
+    owner: "{{ sudo_user }}"
+    group: "{{ sudo_user }}"
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Informer l'utilisateur qu'il doit créer manuellement le fichier de clé SSH
+  pause:
+    prompt: |
+      incus file push ~/.ssh/id_rsa_github.com debian13-test/home/{{ sudo_user }}/.ssh/id_rsa_github.com
+
+      Une fois terminé, appuyez sur ENTRÉE pour continuer...
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Appliquer les permissions correctes au fichier de clé SSH
+  become: true
+  file:
+    path: "/home/{{ sudo_user }}/.ssh/id_rsa_github.com"
+    mode: "0600"
+    owner: "{{ sudo_user }}"
+    group: "{{ sudo_user }}"
+  register: ssh_key_created
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and not github_key.stat.exists
+
+- name: Exécuter la commande SSH pour accepter la clé de l'hôte GitHub
+  become: true
+  become_user: "{{ sudo_user }}"
+  shell: ssh -o StrictHostKeyChecking=accept-new git@github.com
+  register: ssh_command_result
+  failed_when: false
+  changed_when: false
+  when: sudo_user not in ['sirm', 'snap', 'admin'] and ssh_key_created is defined and ssh_key_created.changed
+
 - name: Vérifier si le dépôt yadm dotfiles existe déjà
   become: true
   become_user: "{{ sudo_user }}"
@@ -15,3 +94,12 @@
   args:
     executable: /bin/bash
   when: not yadm_repo.stat.exists
+  register: yadm_clone
+
+- name: Ajouter à gita si cloné
+  become: true
+  become_user: "{{ sudo_user }}"
+  shell: gita add ~/.local/share/yadm/repo.git
+  args:
+    executable: /bin/bash
+  when: yadm_clone is changed
