@@ -1,12 +1,10 @@
 # TODO
 
-disale root account
-
 backports
 fix roles/iut-base/tasks/packages
 compléter roles/sudo_user avec chef 'base-users'
 desktop: maj url package pour ghostty
-desktop-packages: brave, teams, docker/podman, packer, vagrant
+desktop-packages: teams, docker/podman, packer, vagrant
                   virtualbox: enable + maj url repo trixie
 iut-base:
   packages: deborphan, rcconf
@@ -43,5 +41,3 @@ Error: Unable to locate package wtf
 Error: Unable to locate package yazi
 
 crowdsec
-
-teams

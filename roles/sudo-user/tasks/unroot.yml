@@ -1,0 +1,29 @@
+---
+# Cette tâche désactive l'utilisateur root en verrouillant son compte
+# et en définissant son shell à /usr/sbin/nologin
+
+- name: Vérifier que l'utilisateur sudo_user existe et a des droits sudo
+  become: true
+  shell: "getent passwd {{ sudo_user }} && grep -q '{{ sudo_user }}' /etc/sudoers.d/* || grep -q '{{ sudo_user }}' /etc/sudoers"
+  register: sudo_user_check
+  changed_when: false
+  failed_when: false
+
+- name: Afficher un avertissement si l'utilisateur sudo_user n'existe pas ou n'a pas de droits sudo
+  fail:
+    msg: "ATTENTION: L'utilisateur {{ sudo_user }} n'existe pas ou n'a pas de droits sudo. Désactiver root serait dangereux dans cette situation."
+  when: sudo_user_check.rc != 0
+
+- name: Verrouiller le compte root
+  become: true
+  user:
+    name: root
+    password_lock: true
+  when: sudo_user_check.rc == 0
+
+- name: Définir le shell de root à /usr/sbin/nologin
+  become: true
+  user:
+    name: root
+    shell: /usr/sbin/nologin
+  when: sudo_user_check.rc == 0
