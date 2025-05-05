@@ -3,8 +3,12 @@
   become: true
   apt:
     name:
+      - mpv
       - opensnitch
       - opensnitch-ebpf-modules
       - python3-opensnitch-ui
+      - vlc
+      - vlc-l10n
+      - vlc-plugin-base
     state: present
     update_cache: yes
