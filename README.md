@@ -1,6 +1,18 @@
 # README
 
-## bootstrapper une VM Incus
+## Bootstrapper une VM Incus
+
+### Exécuter en ligne
+
+```bash
+curl -sSL https://raw.githubusercontent.com/humboldtux/ansible-bootstrap/main/bootstrap-ansible.sh | ANSIBLE_TAGS="desktop,sudo-user" ANSIBLE_EXTRA_VARS="sudo_user=benben" bash
+```
+
+### Exécuter en local
+
+```bash
+ANSIBLE_TAGS="sudo-user" ANSIBLE_EXTRA_VARS="sudo_user=benben3" ./bootstrap-ansible.sh
+```
 
 ### Lancer la VM
 
