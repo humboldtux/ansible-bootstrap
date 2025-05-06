@@ -1,5 +1,5 @@
 ---
-- import_tasks: apt-nonfree.yml
+- import_tasks: apt-repos.yml
 - import_tasks: wakemeops.yml
 - import_tasks: upgrade.yml
 - import_tasks: packages.yml

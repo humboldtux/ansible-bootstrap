@@ -1,8 +1,0 @@
----
-- name: Ajouter non-free et non-free-firmware aux lignes deb/deb-src de sources.list
-  become: true
-  ansible.builtin.replace:
-    path: /etc/apt/sources.list
-    regexp: '^(deb(?:-src)?\s+\S+\s+\S+\s+.*?main(?:\s+contrib)?)(?!.*non-free)(?!.*non-free-firmware)(.*)$'
-    replace: '\1 non-free non-free-firmware\2'
-    backup: yes

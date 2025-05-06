@@ -1,0 +1,45 @@
+---
+# Cette tâche modifie le fichier sources.list pour :
+# 1. Commenter les lignes deb-src
+# 2. S'assurer que les lignes deb contiennent main, contrib, non-free et non-free-firmware
+
+- name: Commenter les lignes deb-src
+  become: true
+  shell: |
+    sed -i 's/^deb-src/# deb-src/g' /etc/apt/sources.list
+  args:
+    executable: /bin/bash
+  register: commented_src
+  changed_when: commented_src.stdout != ""
+
+- name: Modifier les lignes deb pour inclure les composants nécessaires
+  become: true
+  shell: |
+    # Sauvegarde temporaire
+    cp /etc/apt/sources.list /tmp/sources.list.tmp
+
+    # Traiter chaque ligne deb
+    cat /tmp/sources.list.tmp | while read line; do
+      if [[ $line =~ ^deb ]]; then
+        # Extraire la partie URL et distribution
+        repo_part=$(echo "$line" | awk '{print $1, $2, $3}')
+        # Remplacer la ligne par une version propre avec tous les composants
+        echo "$repo_part main contrib non-free non-free-firmware"
+      else
+        # Garder les autres lignes inchangées
+        echo "$line"
+      fi
+    done > /etc/apt/sources.list
+
+    # Nettoyer
+    rm /tmp/sources.list.tmp
+  args:
+    executable: /bin/bash
+  register: modified_deb
+  changed_when: modified_deb.stdout != ""
+
+- name: Mettre à jour le cache apt après modification des sources
+  become: true
+  apt:
+    update_cache: yes
+  when: ansible_check_mode == false
