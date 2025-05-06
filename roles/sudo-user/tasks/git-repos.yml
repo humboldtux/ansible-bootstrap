@@ -23,7 +23,7 @@
 - name: Ajouter tous les dépôts clonés à gita
   become: true
   become_user: "{{ sudo_user }}"
-  shell: gita add ~/dev/src/github.com/{{ sudo_user }}/*
+  shell: gita add ~/dev/src/github.com/humboldtux/*
   args:
     executable: /bin/bash
   when: git_clone_results is changed
