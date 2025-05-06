@@ -12,8 +12,11 @@
       - fish
       - flex
       - g++-multilib
+      - gcc-doc
+      - gcc-doc-base
       - gcc-multilib
       - gdb
+      - gdb-doc
       - ghex
       - indent
       - keychain
