@@ -1,14 +1,23 @@
 ---
-- name: Installation des paquets pour le desktop
+- name: Installation des paquets communs pour le desktop
   become: true
   apt:
     name:
       - mpv
-      - opensnitch
-      - opensnitch-ebpf-modules
-      - python3-opensnitch-ui
+      - ttf-mscorefonts-installer
       - vlc
       - vlc-l10n
       - vlc-plugin-base
     state: present
     update_cache: yes
+
+- name: Installation des paquets OpenSnitch
+  become: true
+  apt:
+    name:
+      - opensnitch
+      - opensnitch-ebpf-modules
+      - python3-opensnitch-ui
+    state: present
+    update_cache: yes
+  when: "'iut-desktop' not in ansible_run_tags"

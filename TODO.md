@@ -17,15 +17,16 @@ iut-pedago:
 
 iut-desktop:
   packages:
-      - ttf-mscorefonts-installer
       Erreur : Impossible de trouver le paquet freerdp2-x11
       Erreur : Impossible de trouver le paquet libcanberra-gtk-module
       Erreur : Impossible de trouver le paquet lightdm-remote-session-freerdp2
-
-TASK [iut-desktop : Désactiver et arrêter le service Veyon]
+  update-grub: tâche à valider
+  TASK [iut-desktop : Désactiver et arrêter le service Veyon]
 
 neovim:
   0.11
+    <https://github.com/basecamp/omakub/blob/master/install/terminal/app-neovim.sh>
+
   :help clipboard
 
 node?
@@ -41,3 +42,7 @@ Error: Unable to locate package wtf
 Error: Unable to locate package yazi
 
 crowdsec
+
+sudo apt install -y vlc
+sudo apt install -y libavcodec-extra libdvd-pkg; sudo dpkg-reconfigure libdvd-pkg
+sudo apt install -y obs-studio
