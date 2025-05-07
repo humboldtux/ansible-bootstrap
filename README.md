@@ -5,13 +5,15 @@
 ### Exécuter en ligne
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/humboldtux/ansible-bootstrap/main/bootstrap-ansible.sh | ANSIBLE_TAGS="desktop,sudo-user" ANSIBLE_EXTRA_VARS="sudo_user=benben" bash
+wget -q https://raw.githubusercontent.com/humboldtux/ansible-bootstrap/main/bootstrap-ansible.sh -O- | sudo bash -
 ```
 
 ### Exécuter en local
 
 ```bash
-ANSIBLE_TAGS="sudo-user" ANSIBLE_EXTRA_VARS="sudo_user=benben3" ./bootstrap-ansible.sh
+ANSIBLE_TAGS="sudo-user" ANSIBLE_EXTRA_VARS="sudo_user=ben" ./bootstrap-ansible.sh
+# Où
+sudo ansible-pull -U https://github.com/humboldtux/ansible-bootstrap.git -C main -i localhost, -d /opt/ansible playbook.yml --tags "desktop" --extra-vars "sudo_user=ben"
 ```
 
 ### Lancer la VM
@@ -30,10 +32,10 @@ EOF
 
 ### Lancer une VM de test locale pour écrire les rôles Ansible
 
-Au préalable, si travail en remote différent de s760p02:
+Au préalable, si travail en remote différent de s760:
 
 ```bash
-sshfs -o idmap=user s760p02:/home/benben/dev/src/github.com/humboldtux/ansible-bootstrap /home/benben/dev/src/github.com/humboldtux/ansible-bootstrap
+sshfs -o idmap=user s760p02:/home/${USERNAME}/dev/src/github.com/humboldtux/ansible-bootstrap /home/${USERNAME}/dev/src/github.com/humboldtux/ansible-bootstrap
 ```
 
 Puis, création VM:
@@ -46,7 +48,7 @@ packages:
   - curl
 
 runcmd:
-  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local playbook.yml --tags "base" --extra-vars "sudo_user=benben"
+  - cd /mnt/ansible-bootstrap && ansible-playbook -i localhost, -c local playbook.yml --tags "base" --extra-vars "sudo_user=ben"
 EOF
 )" && \
 incus config device override debian13-test root size=30GB && \
