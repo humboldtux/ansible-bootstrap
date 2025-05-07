@@ -1,12 +1,27 @@
 ---
-- name: Définir les dépôts à cloner en fonction de l'utilisateur
+- name: Définir les dépôts publics
   set_fact:
-    repos_to_clone: |
-      {% if sudo_user in ['sirm', 'snap', 'admin'] %}
-      [{ 'repo': 'https://github.com/humboldtux/scripts.git', 'name': 'scripts' }, { 'repo': 'https://github.com/humboldtux/cheats.git', 'name': 'cheats' }]
-      {% else %}
-      [{ 'repo': 'git@github.com:humboldtux/scripts.git', 'name': 'scripts' }, { 'repo': 'git@github.com:humboldtux/cheats.git', 'name': 'cheats' }, { 'repo': 'git@github.com:humboldtux/scripts-priv.git', 'name': 'scripts-priv' }, { 'repo': 'git@github.com:humboldtux/cheats-priv.git', 'name': 'cheats-priv' }]
-      {% endif %}
+    public_repos:
+      - repo: "https://github.com/humboldtux/scripts.git"
+        name: "scripts"
+      - repo: "https://github.com/humboldtux/cheats.git"
+        name: "cheats"
+
+- name: Définir les dépôts privés
+  set_fact:
+    private_repos:
+      - repo: "git@github.com:humboldtux/scripts.git"
+        name: "scripts"
+      - repo: "git@github.com:humboldtux/cheats.git"
+        name: "cheats"
+      - repo: "git@github.com:humboldtux/scripts-priv.git"
+        name: "scripts-priv"
+      - repo: "git@github.com:humboldtux/cheats-priv.git"
+        name: "cheats-priv"
+
+- name: Sélectionner les dépôts à cloner en fonction de l'utilisateur
+  set_fact:
+    repos_to_clone: "{{ public_repos if sudo_user in ['sirm', 'snap', 'admin'] else private_repos }}"
 
 # Clonage des dépôts Git
 - name: Cloner les dépôts Git sélectionnés s'ils n'existent pas
