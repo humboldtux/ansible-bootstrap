@@ -24,4 +24,4 @@ apt install -y ansible git
 
 # Exécuter la commande ansible-pull avec les options
 echo "Exécution de: $ANSIBLE_CMD"
-eval $ANSIBLE_CMD
+echo $ANSIBLE_CMD
