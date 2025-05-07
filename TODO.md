@@ -9,12 +9,6 @@ desktop-packages: teams, docker/podman, packer, vagrant
 iut-base:
   packages: deborphan, rcconf
 
-iut-pedago:
-  packages:
-      - gcc-doc
-      - gcc-doc-base
-      - gdb-doc
-
 iut-desktop:
   packages:
       Erreur : Impossible de trouver le paquet freerdp2-x11

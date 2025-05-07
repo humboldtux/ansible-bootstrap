@@ -1,27 +1,28 @@
 ---
-- name: Configuration bootstrap
-  hosts: all
-  become: true
-  roles:
-    - base
-  tags:
-    - base
-
-- name: Rôle iut-desktop
-  hosts: all
-  become: true
-  roles:
-    - desktop
-  tags:
-    - desktop
-
-- name: Création de l'utilisateur sudo
+- name: Rôle sudo-user
   hosts: all
   become: true
   roles:
     - sudo-user
   tags:
     - sudo-user
+    - base
+    - iut-base
+    - iut-pedago
+    - desktop
+    - iut-desktop
+
+- name: Rôle base
+  hosts: all
+  become: true
+  roles:
+    - base
+  tags:
+    - base
+    - iut-base
+    - iut-pedago
+    - desktop
+    - iut-desktop
 
 - name: Rôle iut-base
   hosts: all
@@ -30,6 +31,8 @@
     - iut-base
   tags:
     - iut-base
+    - iut-pedago
+    - iut-desktop
 
 - name: Rôle iut-pedago
   hosts: all
@@ -38,6 +41,16 @@
     - iut-pedago
   tags:
     - iut-pedago
+    - iut-desktop
+
+- name: Rôle desktop
+  hosts: all
+  become: true
+  roles:
+    - desktop
+  tags:
+    - desktop
+    - iut-desktop
 
 - name: Rôle iut-desktop
   hosts: all
