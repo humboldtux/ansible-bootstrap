@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
   become: true
@@ -18,7 +18,7 @@
   get_url:
     url: https://packages.mozilla.org/apt/repo-signing-key.gpg
     dest: /etc/apt/keyrings/packages.mozilla.org.asc
-    mode: '0644'
+    mode: "0644"
   when: not mozilla_key.stat.exists
 
 - name: Vérifier si le dépôt Mozilla existe déjà
@@ -31,7 +31,7 @@
   copy:
     content: "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main"
     dest: /etc/apt/sources.list.d/mozilla.list
-    mode: '0644'
+    mode: "0644"
   when: not mozilla_repo.stat.exists
   register: mozilla_repo_added
 
@@ -47,4 +47,8 @@
     name:
       - firefox
       - firefox-l10n-fr
+      - firefox-devedition
+      - firefox-devedition-l10n-fr
+      - firefox-esr
+      - firefox-esr-l10n-fr
     state: present
