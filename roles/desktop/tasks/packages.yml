@@ -3,6 +3,7 @@
   become: true
   apt:
     name:
+      - bleachbit
       - mpv
       - ttf-mscorefonts-installer
       - vlc
