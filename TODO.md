@@ -3,7 +3,9 @@
 backports
 fix roles/iut-base/tasks/packages
 compléter roles/sudo_user avec chef 'base-users'
-desktop: maj url package pour ghostty
+desktop:
+  maj url package pour ghostty
+  ttf-ubuntu-font-family
 desktop-packages: teams, docker/podman, packer, vagrant
                   virtualbox: enable + maj url repo trixie
 iut-base:

@@ -4,6 +4,7 @@
   apt:
     name:
       - bleachbit
+      - hx
       - mpv
       - ttf-mscorefonts-installer
       - vlc
