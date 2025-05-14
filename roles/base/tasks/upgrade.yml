@@ -1,5 +1,0 @@
----
-- name: Mettre à jour les paquets
-  apt:
-    update_cache: yes
-    upgrade: dist

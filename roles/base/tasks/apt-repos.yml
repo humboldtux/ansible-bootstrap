@@ -38,6 +38,14 @@
   register: modified_deb
   changed_when: modified_deb.stdout != ""
 
+- name: Nettoyer le cache apt et les listes
+  become: true
+  shell: |
+    apt clean
+    rm -rf /var/lib/apt/lists/*
+  args:
+    executable: /bin/bash
+
 - name: Mettre à jour le cache apt après modification des sources
   become: true
   apt:
