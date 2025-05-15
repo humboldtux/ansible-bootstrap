@@ -5,6 +5,7 @@
     name:
       - anacron
       - apticron
+      - aptitude
       - atool
       - backupninja
       - bat
@@ -13,8 +14,10 @@
       - build-essential
       - clang
       - clang-tools
-      - curl
       - clusterssh
+      - cruft
+      - cruft-ng
+      - curl
       - czkawka-cli
       - detox
       - diffoscope-minimal
@@ -76,6 +79,7 @@
       - pdftk
       - pipx
       - pkg-config
+      - plocate
       - poppler-utils
       - proxychains4
       - putty-tools

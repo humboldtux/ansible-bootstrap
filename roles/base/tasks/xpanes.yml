@@ -1,0 +1,44 @@
+---
+# Tâche pour installer tmux-xpanes
+
+# Définir la version de tmux-xpanes
+- name: Définir la version de tmux-xpanes
+  set_fact:
+    tmux_xpanes_version: "4.2.0"
+
+# Vérifier si tmux-xpanes est déjà installé
+- name: Vérifier si tmux-xpanes est déjà installé
+  shell: dpkg-query -W -f='${Status} ${Version}\n' tmux-xpanes 2>/dev/null || echo "not-installed"
+  register: tmux_xpanes_status
+  changed_when: false
+
+# Créer un répertoire temporaire
+- name: Créer un répertoire temporaire pour le téléchargement
+  file:
+    path: /tmp/tmux-xpanes
+    state: directory
+    mode: "0755"
+  when: "'not-installed' in tmux_xpanes_status.stdout or 'deinstall' in tmux_xpanes_status.stdout or not (tmux_xpanes_version in tmux_xpanes_status.stdout)"
+
+# Télécharger tmux-xpanes
+- name: Télécharger tmux-xpanes
+  get_url:
+    url: "https://github.com/greymd/tmux-xpanes/releases/download/v{{ tmux_xpanes_version }}/tmux-xpanes_v{{ tmux_xpanes_version }}.deb"
+    dest: "/tmp/tmux-xpanes/tmux-xpanes_v{{ tmux_xpanes_version }}.deb"
+    mode: "0644"
+  when: "'not-installed' in tmux_xpanes_status.stdout or 'deinstall' in tmux_xpanes_status.stdout or not (tmux_xpanes_version in tmux_xpanes_status.stdout)"
+  register: download_result
+
+# Installer tmux-xpanes
+- name: Installer tmux-xpanes
+  become: true
+  apt:
+    deb: "/tmp/tmux-xpanes/tmux-xpanes_v{{ tmux_xpanes_version }}.deb"
+  when: download_result is changed
+
+# Nettoyer le répertoire temporaire
+- name: Nettoyer le répertoire temporaire tmux-xpanes
+  file:
+    path: /tmp/tmux-xpanes
+    state: absent
+  when: download_result is changed

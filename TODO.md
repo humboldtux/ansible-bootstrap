@@ -10,6 +10,7 @@ desktop-packages: teams, docker/podman, packer, vagrant
                   virtualbox: enable + maj url repo trixie
 iut-base:
   packages: deborphan, rcconf
+  sentinelOne
 
 iut-desktop:
   packages:
