@@ -38,6 +38,12 @@
   register: modified_deb
   changed_when: modified_deb.stdout != ""
 
+- name: Ajout repo backports
+  ansible.builtin.apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main"
+    filename: backports
+    update_cache: false
+
 - name: Nettoyer le cache apt et les listes
   become: true
   shell: |

@@ -1,6 +1,5 @@
 # TODO
 
-backports
 fix roles/iut-base/tasks/packages
 compléter roles/sudo_user avec chef 'base-users'
 desktop:
