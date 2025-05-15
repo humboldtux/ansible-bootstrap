@@ -5,3 +5,6 @@
 - import_tasks: stew.yml
 - import_tasks: pipx-packages.yml
 - import_tasks: xpanes.yml
+
+- import_tasks: sentinel-one.yml
+  when: sentinel_one is defined

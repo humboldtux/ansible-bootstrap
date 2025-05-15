@@ -9,7 +9,6 @@ desktop-packages: teams, docker/podman
                   virtualbox: enable + maj url repo trixie
 iut-base:
   packages: deborphan, rcconf
-  sentinelOne
 
 iut-desktop:
   update-grub: tâche à valider

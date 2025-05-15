@@ -1,0 +1,44 @@
+---
+# Tâche pour installer et configurer Sentinel One
+
+# Vérifier si la variable sentinel_one est définie
+- name: Vérifier si la variable sentinel_one est définie
+  meta: end_play
+  when: sentinel_one is not defined
+
+# Vérifier si Sentinel One est déjà installé
+- name: Vérifier si Sentinel One est déjà installé
+  package_facts:
+    manager: apt
+
+# Sortir si Sentinel One est déjà installé
+- name: Sortir si Sentinel One est déjà installé
+  meta: end_play
+  when: "'sentinelagent' in ansible_facts.packages"
+
+# Installer Sentinel One depuis le fichier .deb
+- name: Installer Sentinel One depuis le fichier .deb
+  apt:
+    deb: /root/sentinel.deb
+  register: sentinel_install
+
+# Configurer le token Sentinel One
+- name: Configurer le token Sentinel One
+  command: sentinelctl management token set {{ sentinel_one }}
+  when: sentinel_install is changed
+
+# Définir le type de device en fonction des tags
+- name: Définir le type de device
+  set_fact:
+    device_type: "{% if 'desktop' in ansible_run_tags or 'iut-desktop' in ansible_run_tags %}desktop{% else %}server{% endif %}"
+  when: sentinel_install is changed
+
+# Configurer le type de management
+- name: Configurer le type de management
+  command: sentinelctl management type set {{ device_type }}
+  when: sentinel_install is changed
+
+# Démarrer Sentinel One
+- name: Démarrer Sentinel One
+  command: sentinelctl control start
+  when: sentinel_install is changed
