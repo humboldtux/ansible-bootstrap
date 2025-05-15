@@ -5,17 +5,13 @@ compléter roles/sudo_user avec chef 'base-users'
 desktop:
   maj url package pour ghostty
   ttf-ubuntu-font-family
-desktop-packages: teams, docker/podman, packer, vagrant
+desktop-packages: teams, docker/podman
                   virtualbox: enable + maj url repo trixie
 iut-base:
   packages: deborphan, rcconf
   sentinelOne
 
 iut-desktop:
-  packages:
-      Erreur : Impossible de trouver le paquet freerdp2-x11
-      Erreur : Impossible de trouver le paquet libcanberra-gtk-module
-      Erreur : Impossible de trouver le paquet lightdm-remote-session-freerdp2
   update-grub: tâche à valider
   TASK [iut-desktop : Désactiver et arrêter le service Veyon]
 

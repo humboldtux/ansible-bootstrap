@@ -6,12 +6,13 @@
       - bleachbit
       - hx
       - mpv
+      - packer
       - ttf-mscorefonts-installer
+      - vagrant
       - vlc
       - vlc-l10n
       - vlc-plugin-base
     state: present
-    update_cache: yes
 
 - name: Installation des paquets OpenSnitch
   become: true
@@ -21,5 +22,4 @@
       - opensnitch-ebpf-modules
       - python3-opensnitch-ui
     state: present
-    update_cache: yes
   when: "'iut-desktop' not in ansible_run_tags"

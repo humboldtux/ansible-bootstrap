@@ -29,6 +29,8 @@
       - fonts-ipafont-mincho
       - fonts-liberation
       - fonts-unfonts-core
+      - freerdp3-x11
+      - freerdp3-wayland
       - gedit
       - gedit-plugins
       - gedit-plugins-common
