@@ -5,19 +5,14 @@
     name: unattended-upgrades
     state: present
 
-- name: Configuration des fichiers apt.conf.d
+- name: Configuration du fichier 80iut-base dans apt.conf.d
   become: true
   copy:
-    src: "apt-conf/files/{{ item }}"
-    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    src: "apt-conf/files/80iut-base"
+    dest: "/etc/apt/apt.conf.d/80iut-base"
     owner: root
     group: root
     mode: '0644'
-  loop:
-    - 10dpkg-options
-    - 10recommends
-    - 15update-stamp
-    - 50unattended-upgrades
 
 - name: Vérifier si le répertoire apticron existe
   become: true
