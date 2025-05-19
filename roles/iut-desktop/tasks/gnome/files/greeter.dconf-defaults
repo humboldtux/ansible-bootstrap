@@ -10,4 +10,4 @@ banner-message-text='Utilisez vos identifiants UCA pour vous connecter'
 
 [org/gnome/settings-daemon/plugins/power]
 sleep-inactive-ac-timeout=1200
-sleep-inactive-ac-type='suspend'
+sleep-inactive-ac-type='hibernate'
