@@ -1,6 +1,7 @@
 ---
 - import_tasks: gnome.yml
 - import_tasks: ssh.yml
+- import_tasks: sudo.yml
 - import_tasks: cron.yml
 - import_tasks: android.yml
 - import_tasks: microsoft.yml

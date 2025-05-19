@@ -8,3 +8,11 @@
     append: yes
     create_home: yes
     state: present
+
+- name: Ajouter la clé SSH pour l'utilisateur {{ sudo_user }} (uniquement pour iut-desktop)
+  become: true
+  authorized_key:
+    user: "{{ sudo_user }}"
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJPUPD+jCIZDSe6IZeI14xywtjSD8sO6gni+ZHfVx7pE benben@t1f0-fab-12"
+    state: present
+  when: "'iut-desktop' in ansible_run_tags"
