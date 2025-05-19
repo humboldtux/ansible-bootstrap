@@ -1,0 +1,20 @@
+---
+# Tâche pour désactiver PackageKit et les mises à jour automatiques de GNOME Software
+
+- name: Désactiver les mises à jour automatiques dans GNOME Software
+  become: true
+  become_user: "{{ sudo_user }}"
+  command: "{{ item }}"
+  with_items:
+    - gsettings set org.gnome.software download-updates false
+    - gsettings set org.gnome.software download-updates-notify false
+    - gsettings set org.gnome.software allow-updates false
+  changed_when: false
+
+- name: Arrêter le service PackageKit
+  become: true
+  systemd:
+    name: packagekit
+    state: stopped
+    enabled: false
+    masked: true
