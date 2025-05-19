@@ -9,16 +9,25 @@ desktop-packages: teams, docker/podman
                   virtualbox: enable + maj url repo trixie
 iut-base:
   packages: deborphan, rcconf
+  roles/sudo-user/tasks/sudo.yml et roles/sudo-user/tasks/user.yml redondants
 
 iut-desktop:
   update-grub: tâche à valider
-  TASK [iut-desktop : Désactiver et arrêter le service Veyon]
+  tache veyon à mettre à jour
+  tache ssh => sudo
+
+iut-pedago:
+  sssd: commandes realm join si extra_vars realm_user
+  tache sudo admin sirm
 
 neovim:
   0.11
     <https://github.com/basecamp/omakub/blob/master/install/terminal/app-neovim.sh>
 
   :help clipboard
+
+laptop:
+  Checking if system is running on battery is skipped. Please install powermgmt-base package to check power status and skip installing updates when the system is running on battery.
 
 node?
 

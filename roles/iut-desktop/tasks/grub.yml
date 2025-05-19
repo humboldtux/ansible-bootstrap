@@ -1,5 +1,5 @@
 ---
-- name: Déployer la configuration de GRUB
+- name: Déployer la cfgiguration de GRUB
   become: true
   block:
     - name: Créer le répertoire pour les fichiers GRUB
@@ -11,6 +11,7 @@
         group: root
       loop:
         - /etc/grub.d
+        - /etc/default/grub.d
 
     - name: Déployer /etc/grub.d/01_users
       copy:
@@ -21,33 +22,64 @@
         group: root
       register: grub_01_users
 
-    - name: Déployer /etc/grub.d/10_linux
+    - name: Déployer /etc/default/grub.d/50iut-desktop.cfg
       copy:
-        src: grub/files/10_linux
-        dest: /etc/grub.d/10_linux
-        mode: "0750"
-        owner: root
-        group: root
-      register: grub_10_linux
-
-    - name: Déployer /etc/grub.d/30_os-prober
-      copy:
-        src: grub/files/30_os-prober
-        dest: /etc/grub.d/30_os-prober
-        mode: "0750"
-        owner: root
-        group: root
-      register: grub_09_os_prober
-
-    - name: Déployer /etc/default/grub
-      copy:
-        src: grub/files/default_grub
-        dest: /etc/default/grub
+        src: grub/files/50iut-desktop.cfg
+        dest: /etc/default/grub.d/50iut-desktop.cfg
         mode: "0644"
         owner: root
         group: root
-      register: grub_default
+      register: grub_config
+
+    # Recherche de l'entrée Windows dans le fichier grub.cfg
+    - name: Rechercher l'entrée Windows dans grub.cfg
+      shell: grep -i "menuentry.*Windows" /boot/grub/grub.cfg | head -1 | awk -F "'" '{print $2}' || echo ""
+      register: windows_menuentry
+      changed_when: false
+
+    # Vérifier si le fichier 60-iut-desktop.cfg existe
+    - name: Vérifier si le fichier 60-iut-desktop.cfg existe
+      stat:
+        path: /etc/default/grub.d/60-iut-desktop.cfg
+      register: grub_windows_config
+
+    # Vérifier si l'entrée Windows est déjà configurée comme GRUB_DEFAULT
+    - name: Vérifier si l'entrée Windows est déjà configurée comme GRUB_DEFAULT
+      shell: grep -E "^GRUB_DEFAULT=.*{{ windows_menuentry.stdout | regex_escape }}" /etc/default/grub.d/60-iut-desktop.cfg
+      register: grub_default_check
+      changed_when: false
+      failed_when: false
+      when:
+        - windows_menuentry.stdout != ""
+        - grub_windows_config.stat.exists
+
+    # Mettre à jour le fichier 60-iut-desktop.cfg si l'entrée Windows n'est pas configurée comme GRUB_DEFAULT
+    - name: Mettre à jour le fichier 60-iut-desktop.cfg
+      copy:
+        content: "GRUB_DEFAULT=\"{{ windows_menuentry.stdout }}\"\n"
+        dest: /etc/default/grub.d/60-iut-desktop.cfg
+        mode: "0644"
+        owner: root
+        group: root
+      register: grub_windows_updated
+      when:
+        - windows_menuentry.stdout != ""
+        - grub_windows_config.stat.exists
+        - grub_default_check.rc != 0 or grub_default_check.skipped
+
+    # Créer le fichier 60-iut-desktop.cfg s'il n'existe pas
+    - name: Créer le fichier 60-iut-desktop.cfg
+      copy:
+        content: "GRUB_DEFAULT=\"{{ windows_menuentry.stdout }}\"\n"
+        dest: /etc/default/grub.d/60-iut-desktop.cfg
+        mode: "0644"
+        owner: root
+        group: root
+      register: grub_windows_created
+      when:
+        - windows_menuentry.stdout != ""
+        - not grub_windows_config.stat.exists
 
     - name: Exécuter update-grub
       command: update-grub
-      when: grub_01_users.changed or grub_10_linux.changed or grub_09_os_prober.changed or grub_default.changed
+      when: grub_01_users.changed or grub_config.changed or grub_windows_updated.changed | default(false) or grub_windows_created.changed | default(false)
