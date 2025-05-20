@@ -20,17 +20,13 @@ iut-base:
     <https://github.com/basecamp/omakub/blob/master/install/terminal/app-neovim.sh>
     :help clipboard
 
-iut-pedago:
-  sssd: commandes realm join si extra_vars realm_user
-  /etc/skel
-
 desktop:
   maj url package pour ghostty
   ttf-ubuntu-font-family
 
 iut-desktop:
   tache veyon à mettre à jour
-  desktop-packages: teams, docker/podman
+  desktop-packages: docker/podman
                   virtualbox: enable + maj url repo trixie
 
 sudo apt install -y vlc
