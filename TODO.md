@@ -13,6 +13,7 @@ base:
     Error: Unable to locate package yazi
 
 iut-base:
+  sudoers: pberthon, bilancin, fmartinez, sssd?
   packages: deborphan, rcconf
   neovim:
     0.11
@@ -21,6 +22,7 @@ iut-base:
 
 iut-pedago:
   sssd: commandes realm join si extra_vars realm_user
+  /etc/skel
 
 desktop:
   maj url package pour ghostty

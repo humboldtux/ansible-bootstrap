@@ -1,0 +1,80 @@
+---
+- name: Installation des paquets SSSD et dépendances
+  become: true
+  apt:
+    name:
+      - libpam-sss
+      - libnss-sss
+      - libsss-sudo
+      - sssd
+      - sssd-tools
+      - realmd
+      - samba-common-bin
+      - adcli
+      - krb5-user
+      - packagekit
+    state: present
+
+- name: Création du répertoire de configuration SSSD
+  become: true
+  file:
+    path: /etc/sssd/conf.d
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Installation de la configuration PAM pour mkhomedir
+  become: true
+  copy:
+    src: realmd-sssd/files/mkhomedir.pam
+    dest: /usr/share/pam-configs/mkhomedir
+    mode: "0755"
+    owner: root
+    group: root
+  register: mkhomedir_config
+
+- name: Mise à jour de la configuration PAM
+  become: true
+  command: pam-auth-update --package --enable mkhomedir
+  when: mkhomedir_config is changed
+
+- name: Création ou mise à jour du fichier /etc/realmd.conf
+  become: true
+  copy:
+    src: realmd-sssd/files/realmd.conf
+    dest: /etc/realmd.conf
+    mode: "0600"
+    owner: root
+    group: root
+  register: realmd_conf
+
+- name: Redémarrage du service realmd
+  become: true
+  service:
+    name: realmd
+    state: restarted
+  when: realmd_conf is changed
+
+- name: Création ou mise à jour du fichier /etc/sssd/conf.d/iut.conf
+  become: true
+  copy:
+    src: realmd-sssd/files/iut.conf
+    dest: /etc/sssd/conf.d/iut.conf
+    mode: "0600"
+    owner: root
+    group: root
+  register: sssd_iut_conf
+
+- name: Vérifier l'existence du fichier /etc/sssd/sssd.conf
+  become: true
+  stat:
+    path: /etc/sssd/sssd.conf
+  register: sssd_conf_exists
+
+- name: Redémarrage du service sssd
+  become: true
+  service:
+    name: sssd
+    state: restarted
+  when: sssd_iut_conf is changed and sssd_conf_exists.stat.exists

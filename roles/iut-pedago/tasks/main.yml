@@ -1,4 +1,4 @@
 ---
 - import_tasks: git.yml
-- import_tasks: sssd.yml
+- import_tasks: realmd-sssd.yml
 - import_tasks: packages.yml
