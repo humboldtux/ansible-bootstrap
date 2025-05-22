@@ -3,7 +3,10 @@
   become: true
   apt:
     name:
+      - audacity
       - bleachbit
+      - gimp
+      - gnome-tweaks
       - hx
       - mpv
       - packer
@@ -12,6 +15,8 @@
       - vlc
       - vlc-l10n
       - vlc-plugin-base
+      - wl-clipboard
+      - xournalpp
     state: present
 
 - name: Installation des paquets OpenSnitch

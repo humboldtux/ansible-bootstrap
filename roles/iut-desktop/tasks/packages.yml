@@ -38,7 +38,6 @@
       - geogebra-gnome
       - gnome-shell-extensions-extra
       - gnome-shell-extension-shortcuts
-      - gnome-tweaks
       - gnuplot
       - gpaste-2
       - gvfs-fuse
@@ -47,6 +46,7 @@
       - kitty-terminfo
       - kmag
       - libcanberra-gtk3-module
+      - libreoffice
       - libreoffice-calc
       - libreoffice-draw
       - libreoffice-help-fr

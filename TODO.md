@@ -32,3 +32,7 @@ iut-desktop:
 sudo apt install -y vlc
 sudo apt install -y libavcodec-extra libdvd-pkg; sudo dpkg-reconfigure libdvd-pkg
 sudo apt install -y obs-studio
+
+<https://github.com/basecamp/omakub/blob/master/install/terminal/a-shell.sh>
+<https://github.com/basecamp/omakub/blob/master/defaults/bash/rc>
+<https://github.com/basecamp/omakub/blob/master/install/terminal/app-btop.sh>

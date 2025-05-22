@@ -7,10 +7,13 @@
       - apticron
       - aptitude
       - atool
+      - autoconf
       - backupninja
       - bat
+      - bison
       - bottom
       - broot
+      - btop
       - build-essential
       - clang
       - clang-tools
@@ -37,6 +40,9 @@
       - fuse3
       - fzf
       - gdebi
+      - github-cli
+      - gir1.2-clutter-1.0
+      - gir1.2-gtop-2.0
       - git
       - git-delta
       - gita
@@ -45,6 +51,7 @@
       - gum
       - htop
       - iftop
+      - imagemagick
       - iotop
       - iotop-c
       - jc
@@ -54,19 +61,33 @@
       - lazydocker
       - lazygit
       - ldap-utils
+      - libffi-dev
+      - libgdbm-dev
+      - libjemalloc2
+      - libmagickwand-dev
+      - libmariadb-dev
+      - libmariadb-dev-compat
+      - libncurses5-dev
+      - libpq-dev
       - libproxychains4
+      - libreadline-dev
+      - libsqlite3-0
       - libssl-dev
+      - libvips
+      - libyaml-dev
       - linux-headers-amd64
       - lldb
       - lnav
       - locate
       - lsd
       - luarocks
-      - mariadb-client
-      - miller
       - manpages-posix
       - manpages-posix-dev
+      - mariadb-client
+      - miller
       - moreutils
+      - mupdf
+      - mupdf-tools
       - nano
       - ncdu
       - needrestart
@@ -81,6 +102,8 @@
       - pkg-config
       - plocate
       - poppler-utils
+      - postgresql-client
+      - postgresql-client-common
       - proxychains4
       - putty-tools
       - python3-ldap
@@ -88,17 +111,21 @@
       - python3-pip
       - python3-venv
       - ranger
+      - redis-tools
       - reptyr
       - restic
       - resticprofile
       - resvg
+      - rustc
       - smbclient
+      - sqlite3
       - starship
       - vhs
       - xq
       - yadm
       - yt-dlp
       - zellij
+      - zlib1g-dev
       - zoxide
     state: present
     update_cache: yes

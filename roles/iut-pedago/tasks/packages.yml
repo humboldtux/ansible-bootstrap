@@ -24,7 +24,6 @@
       - libblas-dev
       - libncurses-dev
       - libnotify-bin
-      - libreoffice
       - libx11-dev
       - libxt-dev
       - manpages
@@ -34,8 +33,6 @@
       - default-jre-headless
       - php-cli
       - php-common
-      - postgresql-client
-      - postgresql-client-common
       - python-pil-doc
       - python3-matplotlib
       - python3-numpy
