@@ -38,11 +38,20 @@
   register: modified_deb
   changed_when: modified_deb.stdout != ""
 
+- name: Vérifier si backports est déjà configuré
+  become: true
+  shell: grep -c "\-backports" /etc/apt/sources.list || true
+  register: backports_count
+  changed_when: false
+  failed_when: false
+
 - name: Ajout repo backports
+  become: true
   ansible.builtin.apt_repository:
-    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main"
+    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free non-free-firmware"
     filename: backports
     update_cache: false
+  when: backports_count.stdout == "0"
 
 - name: Nettoyer le cache apt et les listes
   become: true
