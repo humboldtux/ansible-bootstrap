@@ -52,6 +52,16 @@
     - desktop
     - iut-desktop
 
+- name: Rôle desktop
+  hosts: all
+  become: true
+  roles:
+    - desktop
+  tags:
+    - desktop
+    - perso-desktop
+    - iut-desktop
+
 - name: Rôle iut-desktop
   hosts: all
   become: true
@@ -59,3 +69,11 @@
     - iut-desktop
   tags:
     - iut-desktop
+
+- name: Rôle perso-desktop
+  hosts: all
+  become: true
+  roles:
+    - perso-desktop
+  tags:
+    - perso-desktop

@@ -1,0 +1,53 @@
+---
+# Installation d'Incus depuis le dépôt Zabbly
+# Nécessite Ansible 2.16+ pour le support du format deb822
+- name: Vérifier que la machine n'est pas un conteneur ni LINSERV-INFO-01
+  ansible.builtin.set_fact:
+    skip_incus: >-
+      {{ (ansible_virtualization_type in ['docker', 'podman', 'lxc', 'incus']) or
+         (ansible_hostname == 'LINSERV-INFO-01') }}
+
+- name: Créer le répertoire pour les clés APT
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: not skip_incus
+
+- name: Ajouter la clé du dépôt Zabbly pour Incus
+  ansible.builtin.get_url:
+    url: https://pkgs.zabbly.com/key.asc
+    dest: /etc/apt/keyrings/zabbly.asc
+    mode: '0644'
+  when: not skip_incus
+
+- name: Ajouter le dépôt Zabbly Incus stable
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/zabbly.asc] https://pkgs.zabbly.com/incus/stable {{ ansible_lsb.codename | default(ansible_distribution_release) }} main
+    filename: incus
+    state: present
+  when: not skip_incus
+
+- name: Mettre à jour la liste des paquets
+  ansible.builtin.apt:
+    update_cache: yes
+  when: not skip_incus
+
+- name: Installer Incus
+  ansible.builtin.apt:
+    name: incus
+    state: present
+  register: incus_install
+  when: not skip_incus
+
+- name: Ajouter l'utilisateur au groupe incus
+  ansible.builtin.user:
+    name: "{{ sudo_user }}"
+    groups: incus
+    append: yes
+  when: not skip_incus and incus_install.changed
+
+- name: Initialiser Incus avec le fichier de préseed
+  ansible.builtin.shell: cat {{ role_path }}/tasks/incus/init.preseed | incus admin init --preseed
+  become: true
+  when: not skip_incus and incus_install.changed

@@ -27,7 +27,7 @@ desktop:
 
 iut-desktop:
   tache veyon à mettre à jour
-  desktop-packages: docker/podman
+  desktop-packages:
                   virtualbox: enable + maj url repo trixie
 
 sudo apt install -y vlc
